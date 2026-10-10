@@ -1,0 +1,515 @@
+<title>DIVZ Hamper Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+<style>
+/* Layout: minimal greyscale wireframe. Clickable storefront in a browser frame, notes beside it, reference stores below. */
+:root{
+  --paper:#F6F6F5; --card:#FFFFFF; --ink:#1E1E1E; --soft:#6E6E6B; --line:#D9D9D6; --fill:#ECECEA; --fill2:#E2E2DF;
+  --blue:#2F5DA8; --blue-soft:#E8EEF8; --orange:#B65A14; --orange-soft:#FAEEE3;
+  --f:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#161616; --card:#1F1F1F; --ink:#ECECEA; --soft:#A2A29E; --line:#353533; --fill:#2A2A28; --fill2:#333331;
+  --blue:#8DB2F2; --blue-soft:#1D2738; --orange:#F0A15C; --orange-soft:#33251A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#161616; --card:#1F1F1F; --ink:#ECECEA; --soft:#A2A29E; --line:#353533; --fill:#2A2A28; --fill2:#333331;
+  --blue:#8DB2F2; --blue-soft:#1D2738; --orange:#F0A15C; --orange-soft:#33251A; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.55;margin:0}
+.page{max-width:1240px;margin:0 auto;padding-inline:18px;padding-block:40px 60px}
+h1,h2,h3{font-weight:600;margin:0;line-height:1.2;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(1.9rem,4.5vw,2.7rem)}
+h2{font-size:clamp(1.4rem,3vw,1.8rem)}
+p{margin:0}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);font-weight:600}
+.lede{max-width:70ch;margin-top:12px;color:var(--soft)}
+.muted{color:var(--soft)}
+.stack{display:flex;flex-direction:column;gap:12px}
+section{margin-top:48px}
+.sec-h{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px}
+.tab{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:10px 14px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:1px;min-width:160px}
+.tab small{color:var(--soft);font-size:.76rem}
+.tab b{font-weight:600;font-size:.92rem}
+.tab[aria-selected="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:start}
+@media (max-width:980px){.stage{grid-template-columns:1fr}}
+.browser{border:1px solid var(--ink);border-radius:10px;background:var(--card);overflow:clip;min-width:0}
+.chrome{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--fill)}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;border:1px solid var(--soft)}
+.url{flex:1;min-width:0;font-size:.75rem;color:var(--soft);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:3px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.store-h{display:flex;align-items:center;gap:16px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.logo{border:1px dashed var(--soft);color:var(--soft);font-size:.75rem;padding:3px 10px;border-radius:4px;white-space:nowrap}
+.store-h nav{display:flex;gap:16px;font-size:.84rem;color:var(--soft)}
+.store-h nav span.on{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:5px}
+@media (max-width:680px){.store-h nav{display:none}}
+.bag{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:.84rem;background:none;border:1px solid var(--line);border-radius:99px;padding:4px 12px;cursor:pointer}
+.bag i{font-style:normal;background:var(--ink);color:var(--card);border-radius:99px;font-size:.7rem;padding:0 6px;font-weight:700}
+.screen{padding:22px;min-height:520px}
+@media (max-width:520px){.screen{padding:14px}}
+
+/* notes panel */
+.notes{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
+.note-box{border-left:3px solid var(--blue);background:var(--blue-soft);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.86rem;display:flex;flex-direction:column;gap:6px}
+.note-box.q{border-color:var(--orange);background:var(--orange-soft)}
+.note-box h4{margin:0;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+.note-box.q h4{color:var(--orange)}
+.note-box ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:4px}
+
+/* store parts */
+.ph{background:var(--fill);border:1px dashed var(--line);border-radius:6px;color:var(--soft);display:grid;place-items:center;text-align:center;font-size:.72rem;padding:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--ink);background:var(--ink);color:var(--card);padding:10px 18px;border-radius:6px;font-weight:600;font-size:.88rem;cursor:pointer}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.small{padding:6px 10px;font-size:.78rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 12px;font-size:.82rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.chip:disabled{opacity:.35;cursor:not-allowed}
+.steps{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.steps button{border:0;background:none;padding:2px 0;font-size:.82rem;color:var(--soft);cursor:pointer;display:flex;align-items:center;gap:6px}
+.steps button b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);font-size:.72rem;font-weight:600}
+.steps button.on{color:var(--ink);font-weight:600}
+.steps button.on b,.steps button.done b{background:var(--ink);border-color:var(--ink);color:var(--card)}
+.steps .sep{width:16px;border-top:1px solid var(--line)}
+.builder{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:20px}
+@media (max-width:760px){.builder{grid-template-columns:1fr}}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
+.opt{border:1px solid var(--line);border-radius:8px;background:var(--card);padding:10px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:5px;position:relative}
+.opt[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt .ph{height:80px}
+.opt .nm{font-weight:600;font-size:.86rem;line-height:1.3}
+.opt .sz{font-size:.75rem;color:var(--soft)}
+.opt .pr{font-size:.85rem;font-variant-numeric:tabular-nums}
+.opt .add{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.opt[aria-pressed="true"] .add{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.opt.dim{opacity:.4}
+.tagrow{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:.64rem;font-weight:700;letter-spacing:.04em;padding:1px 5px;border-radius:3px;border:1px solid var(--line);color:var(--soft)}
+.summary{border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;align-self:start;position:sticky;top:16px;background:var(--card)}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.slot{aspect-ratio:1;border-radius:5px;border:1px dashed var(--line);display:grid;place-items:center;font-size:.58rem;color:var(--soft);text-align:center;line-height:1.1;padding:2px;max-width:100%;overflow:hidden}
+.slot.full{border:1px solid var(--ink);background:var(--fill2);color:var(--ink)}
+.slot.off{opacity:.25}
+.lines{font-size:.8rem;display:flex;flex-direction:column;gap:4px}
+.lines div{display:flex;justify-content:space-between;gap:8px}
+.lines span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.total{display:flex;justify-content:space-between;font-weight:700;border-top:1px solid var(--line);padding-top:8px;font-variant-numeric:tabular-nums}
+.field{display:flex;flex-direction:column;gap:5px;font-size:.82rem;font-weight:600}
+.field input,.field textarea{font:inherit;font-weight:400;border:1px solid var(--line);border-radius:6px;padding:9px 11px;background:var(--card);color:var(--ink)}
+.field textarea{resize:vertical;min-height:80px}
+.field .count{font-weight:400;color:var(--soft);font-size:.75rem;align-self:flex-end}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.form2{grid-template-columns:1fr}}
+.alert{font-size:.8rem;border:1px solid var(--line);background:var(--fill);border-radius:6px;padding:8px 10px}
+.check{display:flex;align-items:center;gap:10px;font-size:.84rem;border:1px solid var(--line);border-radius:6px;padding:8px 10px;cursor:pointer;background:var(--card)}
+.check input{accent-color:var(--ink)}
+
+/* PDP */
+.pdp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+@media (max-width:760px){.pdp{grid-template-columns:1fr}}
+.gallery{display:flex;flex-direction:column;gap:8px}
+.gallery .main{aspect-ratio:1/1;max-width:100%}
+.thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.thumbs .ph{aspect-ratio:1;font-size:.55rem;padding:2px;max-width:100%}
+.price-big{font-size:1.4rem;font-variant-numeric:tabular-nums;font-weight:600}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+legend{font-weight:600;font-size:.86rem;margin-bottom:6px;padding:0}
+.sw-opts{display:flex;flex-wrap:wrap;gap:6px}
+.sw{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:7px 12px;cursor:pointer;font-size:.84rem;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left}
+.sw small{color:var(--soft);font-size:.73rem;font-variant-numeric:tabular-nums}
+.sw[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+
+/* collection tray */
+.coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;padding-bottom:24px}
+.tray{position:sticky;bottom:0;margin:0 -22px -22px;background:var(--card);border-top:1px solid var(--ink);padding:12px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+@media (max-width:520px){.tray{margin:0 -14px -14px;padding:12px 14px}}
+.tray .slots{grid-template-columns:repeat(5,42px)}
+.tray .meta{flex:1;min-width:140px;font-size:.82rem}
+.tray .meta b{font-size:1.05rem;font-variant-numeric:tabular-nums}
+
+/* tiers */
+.tiers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.tier{border:1px solid var(--line);border-radius:8px;padding:14px;cursor:pointer;background:var(--card);text-align:left;display:flex;flex-direction:column;gap:2px}
+.tier[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.tier .tp{font-size:1.6rem;font-weight:700}
+.tier small{color:var(--soft)}
+
+/* quiz */
+.quiz{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.qprog{height:4px;background:var(--fill2);border-radius:99px;overflow:hidden}
+.qprog i{display:block;height:100%;background:var(--ink);transition:width .3s}
+.qtitle{font-size:1.5rem;font-weight:600}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.qopts{grid-template-columns:1fr}}
+.qopt{border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--card);cursor:pointer;text-align:left;font-weight:600;display:flex;flex-direction:column;gap:2px}
+.qopt small{font-weight:400;color:var(--soft)}
+.qopt[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.result{display:grid;grid-template-columns:160px minmax(0,1fr);gap:18px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:18px}
+@media (max-width:520px){.result{grid-template-columns:1fr}}
+.result .ph{aspect-ratio:1;max-width:100%}
+
+/* bag drawer */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:50;display:flex;justify-content:flex-end}
+.drawer{width:min(430px,100%);height:100%;background:var(--card);color:var(--ink);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px calc(env(safe-area-inset-bottom,0px) + 18px);gap:14px;overflow-y:auto;border-left:1px solid var(--ink)}
+.drawer header{display:flex;justify-content:space-between;align-items:center}
+.bagitem{border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.cl{display:flex;flex-direction:column;gap:6px;font-size:.86rem}
+.cl .row{display:flex;justify-content:space-between;gap:10px;font-variant-numeric:tabular-nums}
+.cl .parent{font-weight:600}
+.cl .child{padding-left:16px;color:var(--soft);position:relative}
+.cl .child::before{content:"";position:absolute;left:5px;top:-3px;height:12px;width:7px;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+.props{font-size:.78rem;color:var(--soft);background:var(--fill);border-radius:6px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+
+/* refs */
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:16px}
+.ref{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ref .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ref h3{font-size:1.05rem}
+.ref .where{font-size:.75rem;color:var(--soft);white-space:nowrap}
+.ref .ph{min-height:86px}
+.ref a{font-size:.8rem;word-break:break-all}
+.ref p{font-size:.86rem}
+.ref .look{font-size:.82rem;color:var(--blue);border-top:1px solid var(--line);padding-top:8px}
+.foot{margin-top:40px;color:var(--soft);font-size:.8rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<main class="page">
+  <p class="eyebrow">DIVZ · Hamper concepts · October 2026</p>
+  <h1 style="margin-top:10px">Five ways to let customers build a hamper</h1>
+  <p class="lede">Clickable wireframes of how custom hampers could work on the DIVZ website. They show layout and flow only; colours, fonts and photography come later with the brand. Every concept can be built on Shopify. Products and prices are sample data in AUD, GST included. Try adding items and opening the bag.</p>
+
+  <section id="protos">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="stage">
+      <div class="browser">
+        <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="url" id="url">divz.com.au</span></div>
+        <div class="store-h">
+          <span class="logo">DIVZ logo</span>
+          <nav id="storenav"><span>Occasions</span><span>Hampers</span><span>Build a hamper</span><span>Gift finder</span><span>Corporate</span></nav>
+          <button class="bag" id="bagBtn" type="button">Bag <i id="bagCount">0</i></button>
+        </div>
+        <div class="screen" id="screen"></div>
+      </div>
+      <aside class="notes" id="notes"></aside>
+    </div>
+  </section>
+
+  <section id="refs">
+    <div class="sec-h">
+      <p class="eyebrow">Inspiration</p>
+      <h2>Gifting stores already on Shopify</h2>
+      <p class="muted">Each of these runs on Shopify (checked 10 Oct 2026). Have a look and tell us what you like.</p>
+    </div>
+    <div class="refs" id="refList"></div>
+  </section>
+
+  <p class="foot">DIVZ is a working name. Sample products and prices are illustrative.</p>
+</main>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="bagTitle">
+    <header><h3 id="bagTitle">Your bag</h3><button class="btn ghost small" type="button" id="closeBag">Close</button></header>
+    <div id="bagBody" class="stack"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const money=n=>'$'+n.toFixed(2).replace(/\.00$/,'');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ph=(label,cls)=>`<span class="ph${cls?' '+cls:''}">${esc(label)}</span>`;
+
+const CATS={sips:'Sips',sweet:'Sweet',savoury:'Savoury',keepsake:'Keepsakes',pamper:'Pamper'};
+const ITEMS=[
+ {id:'shiraz',name:'Barossa Valley Shiraz',short:'Shiraz',size:'750 ml',cat:'sips',price:38,alc:1,diet:['vegan','gf']},
+ {id:'prosecco',name:'King Valley Prosecco',short:'Prosecco',size:'750 ml',cat:'sips',price:32,alc:1,diet:['vegan','gf']},
+ {id:'spritz',name:'Apple & Elderflower Sparkling',short:'Sparkling',size:'750 ml · alcohol-free',cat:'sips',price:16,diet:['vegan','gf']},
+ {id:'chai',name:'Masala Chai Leaf Tea',short:'Chai',size:'100 g',cat:'sips',price:18,diet:['vegan','gf']},
+ {id:'choc',name:'Dark Chocolate & Wattleseed',short:'Choc',size:'100 g',cat:'sweet',price:12,heat:1,diet:['vegan','gf']},
+ {id:'fudge',name:'Salted Caramel Fudge',short:'Fudge',size:'200 g',cat:'sweet',price:15,heat:1,diet:['gf']},
+ {id:'biscotti',name:'Pistachio & Rose Biscotti',short:'Biscotti',size:'180 g',cat:'sweet',price:16,nuts:1,diet:[]},
+ {id:'katli',name:'Kaju Katli',short:'Katli',size:'250 g',cat:'sweet',price:22,nuts:1,diet:['gf']},
+ {id:'dukkah',name:'Macadamia Dukkah',short:'Dukkah',size:'120 g',cat:'savoury',price:14,nuts:1,diet:['vegan','gf']},
+ {id:'lavosh',name:'Sea Salt Lavosh',short:'Lavosh',size:'150 g',cat:'savoury',price:9,diet:['vegan']},
+ {id:'quince',name:'Quince Paste',short:'Quince',size:'120 g',cat:'savoury',price:11,diet:['vegan','gf']},
+ {id:'candle',name:'Eucalyptus & Mint Soy Candle',short:'Candle',size:'200 g',cat:'keepsake',price:29,diet:['vegan','gf']},
+ {id:'swaddle',name:'Organic Muslin Swaddle',short:'Swaddle',size:'120 × 120 cm',cat:'keepsake',price:26,diet:['vegan','gf']},
+ {id:'bunny',name:'Knitted Bunny Rattle',short:'Rattle',size:'18 cm',cat:'keepsake',price:24,diet:['vegan','gf']},
+ {id:'handcream',name:'Kakadu Plum Hand Cream',short:'Cream',size:'75 ml',cat:'pamper',price:24,diet:['vegan','gf']},
+ {id:'bathsalts',name:'Lavender Bath Salts',short:'Salts',size:'300 g',cat:'pamper',price:19,diet:['vegan','gf']}
+];
+const byId=id=>ITEMS.find(i=>i.id===id);
+const BOXES=[
+ {id:'kraft',name:'Kraft Gift Box',holds:3,price:10,note:'Recyclable, satin ribbon'},
+ {id:'hatbox',name:'Keepsake Hatbox',holds:5,price:18,note:'Linen-wrapped, reusable'},
+ {id:'basket',name:'Willow Basket',holds:5,price:28,note:'Handwoven, cellophane wrap'}
+];
+const OCC=['Baby shower','Birthday','Thank you','Diwali','Christmas','Just because'];
+const tags=i=>`<span class="tagrow">${i.alc?'<span class="tag">18+</span>':''}${i.heat?'<span class="tag">KEEP COOL</span>':''}${i.diet.includes('vegan')?'<span class="tag">VG</span>':''}${i.diet.includes('gf')?'<span class="tag">GF</span>':''}${i.nuts?'<span class="tag">NUTS</span>':''}</span>`;
+const slotsHTML=(sel,cap)=>`<div class="slots">${Array.from({length:5},(_,k)=>{const it=sel[k];return `<span class="slot ${it?'full':''} ${k>=cap?'off':''}">${it?esc(it.short):''}</span>`}).join('')}</div>`;
+
+/* bag */
+const bag=[];
+function bagCount(){$('#bagCount').textContent=bag.length}
+function openBag(){
+  const body=$('#bagBody');
+  if(!bag.length){body.innerHTML='<p class="muted">Your bag is empty. Build a hamper in any concept, then add it here.</p>'}
+  else{
+    let sub=0;
+    body.innerHTML=bag.map((h,ix)=>{
+      const t=h.price+h.children.reduce((a,c)=>a+c.price,0); sub+=t;
+      return `<div class="bagitem"><div class="cl"><div class="row parent"><span>${esc(h.title)}</span><span>${money(h.price)}</span></div>
+        ${h.children.map(c=>`<div class="row child"><span>${esc(c.name)}</span><span>${c.price?money(c.price):'incl.'}</span></div>`).join('')}</div>
+        ${Object.keys(h.props).length?`<div class="props">${Object.entries(h.props).map(([k,v])=>`<span><b>${esc(k)}:</b> ${esc(v)}</span>`).join('')}</div>`:''}
+        <div class="cl"><div class="row parent"><span>Hamper total</span><span>${money(t)}</span></div></div>
+        <button class="btn ghost small" type="button" data-rm="${ix}" style="align-self:flex-start">Remove hamper</button></div>`}).join('')+
+      `<div class="total"><span>Subtotal (GST incl.)</span><span>${money(sub)}</span></div><button class="btn" type="button">Checkout</button><p class="muted" style="font-size:.8rem">Each hamper stays grouped with its items in the bag, at checkout and on the order the packing team sees.</p>`;
+    body.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{bag.splice(+b.dataset.rm,1);bagCount();openBag()});
+  }
+  $('#overlay').hidden=false; $('#closeBag').focus();
+}
+$('#bagBtn').onclick=openBag;
+$('#closeBag').onclick=()=>{$('#overlay').hidden=true};
+$('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')$('#overlay').hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#overlay').hidden=true});
+function addHamper(box,items,props,title){
+  bag.push({title:title||box.name+' · your hamper',price:box.price,children:items.map(i=>({name:i.name,price:i.price})),props});
+  bagCount(); openBag();
+}
+
+/* notes */
+const notes=(how,qs)=>`<div class="note-box"><h4>How it works</h4><ul>${how.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="note-box q"><h4>Questions for you</h4><ul>${qs.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+
+const PROTOS=[
+ {id:'A',name:'Build a hamper',sub:'Step by step',url:'divz.com.au/pages/build-a-hamper',nav:2,render:renderA,notes:()=>notes(
+   ['Start with an empty box: occasion, box, items, card, review','The box sets how many items fit, so it can’t be overfilled','Price = box + items, updating as you go','Try the Kraft box (holds 3), or add the Shiraz to see the 18+ check'],
+   ['Which occasions at launch?','Which box styles, and should bigger boxes hold more items?','Printed card or handwritten? Is 250 characters enough?','Which cities, and what’s the same-day cut-off?'])},
+ {id:'B',name:'Customise this hamper',sub:'On the product page',url:'divz.com.au/products/the-new-arrival',nav:1,render:renderB,notes:()=>notes(
+   ['Start from a ready-made hamper and swap up to 3 items','The rest of the hamper stays as you designed it','Extras like a candle can be added on top','Fastest choice for most gift buyers'],
+   ['Which 3 items in each hamper should be swappable?','Should swaps change the price, or keep one fixed price?'])},
+ {id:'C',name:'Fill your box',sub:'While browsing',url:'divz.com.au/collections/build-your-own',nav:2,render:renderC,notes:()=>notes(
+   ['A normal shop page with “Add to box” on every product','The tray at the bottom fills up as you shop','Filters for alcohol-free, vegan and nut-free','Works best once the range has 50+ products'],
+   ['How many products do you expect at launch?','Should items also be sold on their own, outside hampers?'])},
+ {id:'D',name:'Pick any 5',sub:'One set price',url:'divz.com.au/pages/pick-any-five',nav:1,render:renderD,notes:()=>notes(
+   ['Choose a size with a set price, then pick any items','The price doesn’t change whatever is picked','Easy to advertise: “any 5 for $109”','Needs a small monthly app on Shopify'],
+   ['Do you want set prices, or is box + items pricing enough to start?','Should premium items like wine be excluded or cost extra?'])},
+ {id:'E',name:'Gift finder',sub:'4-question quiz',url:'divz.com.au/pages/gift-finder',nav:3,render:renderE,notes:()=>notes(
+   ['Four quick questions lead to a recommended hamper','Buy it as is, or open it in the builder to tweak','New products join the quiz automatically'],
+   ['Are under $80, $80–150 and $150+ the right budget bands?','Any other question you’d want to ask buyers?'])}
+];
+let current='A';
+function drawTabs(){
+  $('#tabs').innerHTML=PROTOS.map(p=>`<button class="tab" role="tab" type="button" id="tab-${p.id}" aria-selected="${p.id===current}"><small>Concept ${p.id}</small><b>${p.name}</b><small>${p.sub}</small></button>`).join('');
+  PROTOS.forEach(p=>$('#tab-'+p.id).onclick=()=>show(p.id));
+}
+function show(id){
+  current=id; drawTabs();
+  const p=PROTOS.find(x=>x.id===id);
+  $('#url').textContent=p.url;
+  [...$('#storenav').children].forEach((s,i)=>s.classList.toggle('on',i===p.nav));
+  $('#notes').innerHTML=p.notes();
+  p.render();
+}
+
+/* A: builder */
+const A={step:0,occ:'Baby shower',box:'hatbox',items:['spritz','choc','swaddle'],cat:'all',to:'Priya',from:'The Sydney team',msg:'Welcome to the world, little one! Can’t wait to meet you.',date:'2026-10-24',adult:false};
+function renderA(){
+  const box=BOXES.find(b=>b.id===A.box);
+  const steps=['Occasion','Box','Fill it','Card & date','Review'];
+  const sel=A.items.map(byId);
+  const hasAlc=sel.some(i=>i.alc);
+  const total=box.price+sel.reduce((a,i)=>a+i.price,0);
+  let main='';
+  if(A.step===0){
+    main=`<h3>What's the occasion?</h3><p class="muted" style="margin:4px 0 14px;font-size:.88rem">We'll match the card design and suggest items.</p><div class="opt-grid">${OCC.map(o=>`<button class="opt" type="button" data-occ="${o}" aria-pressed="${A.occ===o}">${ph('photo')}<span class="nm">${o}</span></button>`).join('')}</div>`;
+  }else if(A.step===1){
+    main=`<h3>Choose your box</h3><p class="muted" style="margin:4px 0 14px;font-size:.88rem">The box sets how many items fit.</p><div class="opt-grid">${BOXES.map(b=>`<button class="opt" type="button" data-box="${b.id}" aria-pressed="${A.box===b.id}">${ph('photo: '+b.name.toLowerCase())}<span class="nm">${b.name}</span><span class="sz">Holds ${b.holds} items · ${b.note}</span><span class="pr">${money(b.price)}</span></button>`).join('')}</div>`;
+  }else if(A.step===2){
+    const list=ITEMS.filter(i=>A.cat==='all'||i.cat===A.cat);
+    const full=A.items.length>=box.holds;
+    main=`<h3>Fill it (${A.items.length}/${box.holds})</h3><div class="chips" style="margin:10px 0 14px">${['all',...Object.keys(CATS)].map(c=>`<button class="chip" type="button" data-cat="${c}" aria-pressed="${A.cat===c}">${c==='all'?'All':CATS[c]}</button>`).join('')}</div>
+    ${full?`<p class="alert" style="margin-bottom:12px">Your ${box.name} is full. Remove an item, or go back and pick a bigger box.</p>`:''}
+    <div class="opt-grid">${list.map(i=>{const on=A.items.includes(i.id);return `<button class="opt${!on&&full?' dim':''}" type="button" data-item="${i.id}" aria-pressed="${on}"><span class="add">${on?'✓':'+'}</span>${ph('photo')}<span class="nm">${esc(i.name)}</span><span class="sz">${esc(i.size)}</span>${tags(i)}<span class="pr">${money(i.price)}</span></button>`}).join('')}</div>`;
+  }else if(A.step===3){
+    main=`<h3>Card &amp; delivery</h3><div class="stack" style="margin-top:14px">
+      <div class="form2"><label class="field" for="a-to">To<input id="a-to" maxlength="40" value="${esc(A.to)}"></label><label class="field" for="a-from">From<input id="a-from" maxlength="40" value="${esc(A.from)}"></label></div>
+      <label class="field" for="a-msg">Message on a ${esc(A.occ.toLowerCase())} card<textarea id="a-msg" maxlength="250">${esc(A.msg)}</textarea><span class="count" id="a-count">${A.msg.length}/250</span></label>
+      <label class="field" for="a-date">Delivery date<input id="a-date" type="date" value="${A.date}"></label>
+      ${hasAlc?`<label class="check" for="a-adult"><input type="checkbox" id="a-adult" ${A.adult?'checked':''}> I confirm I and the recipient are 18 or over. Someone 18+ must show ID on delivery.</label>`:''}
+      ${sel.some(i=>i.heat)?'<p class="alert">Contains chocolate: from December to February we pack it with a cool pack.</p>':''}
+    </div>`;
+  }else{
+    main=`<h3>Review your hamper</h3><div class="bagitem" style="margin-top:14px"><div class="cl"><div class="row parent"><span>${box.name}</span><span>${money(box.price)}</span></div>${sel.map(i=>`<div class="row child"><span>${esc(i.name)}</span><span>${money(i.price)}</span></div>`).join('')}</div><div class="props"><span><b>Occasion:</b> ${esc(A.occ)}</span><span><b>To:</b> ${esc(A.to)} · <b>From:</b> ${esc(A.from)}</span><span><b>Message:</b> ${esc(A.msg)}</span><span><b>Delivery:</b> ${esc(A.date)}</span></div></div>
+    ${hasAlc&&!A.adult?'<p class="alert" style="margin-top:12px">This hamper has an 18+ item. Go back to "Card & date" and tick the age confirmation.</p>':''}
+    ${!sel.length?'<p class="alert" style="margin-top:12px">Your hamper is empty. Add at least one item.</p>':''}
+    <div style="margin-top:16px"><button class="btn" type="button" id="a-add" ${(hasAlc&&!A.adult)||!sel.length?'disabled':''}>Add hamper to bag · ${money(total)}</button></div>`;
+  }
+  $('#screen').innerHTML=`<nav class="steps" aria-label="Builder steps">${steps.map((s,i)=>`${i?'<span class="sep"></span>':''}<button type="button" data-step="${i}" class="${i===A.step?'on':i<A.step?'done':''}"><b>${i<A.step?'✓':i+1}</b>${s}</button>`).join('')}</nav>
+  <div class="builder"><div>${main}<div style="display:flex;justify-content:space-between;margin-top:20px;gap:10px">${A.step>0?'<button class="btn ghost" type="button" id="a-back">Back</button>':'<span></span>'}${A.step<4?'<button class="btn" type="button" id="a-next">Continue</button>':''}</div></div>
+  <aside class="summary" aria-label="Hamper summary"><span class="eyebrow">Your hamper</span><b style="font-size:.92rem">${box.name}</b>${slotsHTML(sel,box.holds)}
+    <div class="lines"><div><span>Box</span><span>${money(box.price)}</span></div>${sel.map(i=>`<div><span>${esc(i.name)}</span><span>${money(i.price)}</span></div>`).join('')}<div><span>Printed card</span><span>Free</span></div></div>
+    <div class="total"><span>Total</span><span>${money(total)}</span></div></aside></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{A.step=+b.dataset.step;renderA()});
+  s.querySelectorAll('[data-occ]').forEach(b=>b.onclick=()=>{A.occ=b.dataset.occ;renderA()});
+  s.querySelectorAll('[data-box]').forEach(b=>b.onclick=()=>{A.box=b.dataset.box;A.items=A.items.slice(0,BOXES.find(x=>x.id===A.box).holds);renderA()});
+  s.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{A.cat=b.dataset.cat;renderA()});
+  s.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{const id=b.dataset.item;if(A.items.includes(id))A.items=A.items.filter(x=>x!==id);else if(A.items.length<box.holds)A.items.push(id);renderA()});
+  const nx=$('#a-next'); if(nx)nx.onclick=()=>{A.step++;renderA()};
+  const bk=$('#a-back'); if(bk)bk.onclick=()=>{A.step--;renderA()};
+  if(A.step===3){
+    $('#a-to').oninput=e=>A.to=e.target.value; $('#a-from').oninput=e=>A.from=e.target.value;
+    $('#a-msg').oninput=e=>{A.msg=e.target.value;$('#a-count').textContent=A.msg.length+'/250'};
+    $('#a-date').oninput=e=>A.date=e.target.value;
+    const ad=$('#a-adult'); if(ad)ad.onchange=e=>A.adult=e.target.checked;
+  }
+  const add=$('#a-add'); if(add)add.onclick=()=>addHamper(box,sel,{Occasion:A.occ,To:A.to,From:A.from,Message:A.msg,'Delivery date':A.date});
+}
+
+/* B: product page swaps */
+const B={sip:'spritz',sweet:'choc',keep:'swaddle',addons:[],msg:'Congratulations on your little one!'};
+const BSLOTS=[
+ {key:'sip',label:'Something to sip',opts:[['spritz',0],['chai',2],['prosecco',16]]},
+ {key:'sweet',label:'Something sweet',opts:[['choc',0],['biscotti',4],['katli',10]]},
+ {key:'keep',label:'A keepsake for baby',opts:[['swaddle',0],['bunny',0]]}
+];
+const BBASE=119, BFIXED=['handcream','bathsalts','lavosh'];
+function renderB(){
+  const delta=BSLOTS.reduce((a,s)=>a+s.opts.find(o=>o[0]===B[s.key])[1],0);
+  const addTotal=B.addons.reduce((a,id)=>a+byId(id).price,0);
+  const alc=BSLOTS.some(s=>byId(B[s.key]).alc);
+  const inside=[...BSLOTS.map(s=>byId(B[s.key])),...BFIXED.map(byId)];
+  $('#screen').innerHTML=`<div class="pdp">
+    <div class="gallery">${ph('photo: The New Arrival hamper','main')}<div class="thumbs">${inside.map(i=>ph(i.short)).join('')}</div>
+      <div class="bagitem" style="gap:6px"><b style="font-size:.86rem">What's inside</b><ul style="font-size:.82rem;margin:0;padding-left:18px">${inside.map(i=>`<li>${esc(i.name)} <span class="muted">· ${esc(i.size)}</span></li>`).join('')}<li>Keepsake Hatbox and printed card</li></ul></div></div>
+    <div class="stack">
+      <span class="eyebrow">Baby shower · Hamper</span>
+      <h3 style="font-size:1.6rem">The New Arrival</h3>
+      <p class="price-big">${money(BBASE+delta)}</p>
+      <p class="muted" style="font-size:.88rem">A gentle welcome for new parents. Choose three of the items; the rest are our favourites.</p>
+      ${BSLOTS.map(s=>`<fieldset><legend>${s.label}</legend><div class="sw-opts">${s.opts.map(([id,d])=>`<button class="sw" type="button" data-slot="${s.key}" data-id="${id}" aria-pressed="${B[s.key]===id}">${esc(byId(id).name)}<small>${d?'+'+money(d):'Included'}${byId(id).alc?' · 18+':''}</small></button>`).join('')}</div></fieldset>`).join('')}
+      <p class="muted" style="font-size:.84rem">Always included: ${BFIXED.map(id=>byId(id).name).join(', ')}.</p>
+      <fieldset><legend>Add something extra</legend>${['candle','fudge'].map(id=>`<label class="check" for="b-${id}"><input type="checkbox" id="b-${id}" data-addon="${id}" ${B.addons.includes(id)?'checked':''}> ${esc(byId(id).name)} <span class="muted" style="margin-left:auto">+${money(byId(id).price)}</span></label>`).join('')}</fieldset>
+      <label class="field" for="b-msg">Card message<textarea id="b-msg" maxlength="250">${esc(B.msg)}</textarea></label>
+      ${alc?'<p class="alert">Prosecco selected: you’ll confirm you’re 18+ in the bag, and ID is checked on delivery.</p>':''}
+      <button class="btn" type="button" id="b-add">Add to bag · ${money(BBASE+delta+addTotal)}</button>
+    </div></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{B[b.dataset.slot]=b.dataset.id;renderB()});
+  s.querySelectorAll('[data-addon]').forEach(c=>c.onchange=()=>{const id=c.dataset.addon;B.addons=c.checked?[...B.addons,id]:B.addons.filter(x=>x!==id);renderB()});
+  $('#b-msg').oninput=e=>B.msg=e.target.value;
+  $('#b-add').onclick=()=>{
+    bag.push({title:'The New Arrival',price:BBASE+delta,children:[...inside.map(i=>({name:i.name,price:0})),...B.addons.map(id=>({name:byId(id).name+' (extra)',price:byId(id).price}))],props:{Message:B.msg}});
+    bagCount();openBag();
+  };
+}
+
+/* C: collection + tray */
+const C={cat:'all',noalc:false,vegan:false,nutfree:false,items:['chai','katli','candle']};
+const CBOX=BOXES[1];
+function renderC(){
+  const list=ITEMS.filter(i=>(C.cat==='all'||i.cat===C.cat)&&(!C.noalc||!i.alc)&&(!C.vegan||i.diet.includes('vegan'))&&(!C.nutfree||!i.nuts));
+  const sel=C.items.map(byId); const full=sel.length>=5;
+  const total=CBOX.price+sel.reduce((a,i)=>a+i.price,0);
+  $('#screen').innerHTML=`<div class="stack" style="gap:4px;margin-bottom:14px"><span class="eyebrow">Build your own</span><h3 style="font-size:1.5rem">Fill your hatbox</h3><p class="muted" style="font-size:.88rem">Pick any 5. Every hamper is hand-packed with a printed card.</p></div>
+  <div class="chips" style="margin-bottom:8px">${['all',...Object.keys(CATS)].map(c=>`<button class="chip" type="button" data-cat="${c}" aria-pressed="${C.cat===c}">${c==='all'?'All':CATS[c]}</button>`).join('')}</div>
+  <div class="chips" style="margin-bottom:16px;align-items:center"><button class="chip" type="button" data-f="noalc" aria-pressed="${C.noalc}">Alcohol-free</button><button class="chip" type="button" data-f="vegan" aria-pressed="${C.vegan}">Vegan</button><button class="chip" type="button" data-f="nutfree" aria-pressed="${C.nutfree}">Nut-free</button><span class="muted" style="font-size:.8rem">${list.length} products</span></div>
+  <div class="coll-grid">${list.map(i=>{const on=C.items.includes(i.id);return `<div class="opt${!on&&full?' dim':''}" style="cursor:default">${ph('photo')}<span class="nm">${esc(i.name)}</span><span class="sz">${esc(i.size)}</span>${tags(i)}<span class="pr">${money(i.price)}</span><button class="btn small ${on?'':'ghost'}" type="button" data-item="${i.id}" ${!on&&full?'disabled':''}>${on?'In your box ✓':full?'Box full':'Add to box'}</button></div>`}).join('')}</div>
+  <div class="tray">${slotsHTML(sel,5)}
+  <div class="meta">${sel.length}/5 in your Keepsake Hatbox<br><b>${money(total)}</b> incl. box ${money(CBOX.price)}</div>
+  <button class="btn" type="button" id="c-add" ${sel.length?'':'disabled'}>Add hamper to bag</button></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{C.cat=b.dataset.cat;renderC()});
+  s.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{C[b.dataset.f]=!C[b.dataset.f];renderC()});
+  s.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{const id=b.dataset.item;if(C.items.includes(id))C.items=C.items.filter(x=>x!==id);else if(C.items.length<5)C.items.push(id);renderC()});
+  $('#c-add').onclick=()=>addHamper(CBOX,sel,{});
+}
+
+/* D: fixed-price tiers */
+const D={tier:5,items:['spritz','choc','dukkah','candle','handcream']};
+const TIERS={3:{name:'The Little One',price:69},5:{name:'The Classic',price:109}};
+function renderD(){
+  const max=D.tier; const sel=D.items.slice(0,max).map(byId); const T=TIERS[max];
+  const retail=sel.reduce((a,i)=>a+i.price,0)+BOXES[1].price;
+  const full=sel.length>=max;
+  $('#screen').innerHTML=`<div class="stack" style="gap:4px;margin-bottom:16px"><span class="eyebrow">Set-price hampers</span><h3 style="font-size:1.5rem">Pick any ${max}, one price</h3><p class="muted" style="font-size:.88rem">Choose a size, fill it, and the price stays the same.</p></div>
+  <div class="tiers">${[3,5].map(t=>`<button class="tier" type="button" data-tier="${t}" aria-pressed="${D.tier===t}"><small>${TIERS[t].name}</small><span class="tp">${money(TIERS[t].price)}</span><small>Any ${t} items + box + card</small></button>`).join('')}</div>
+  <div class="builder"><div class="stack">${Object.keys(CATS).map(c=>`<div><b style="font-size:.86rem">${CATS[c]}</b><div class="chips" style="margin-top:6px">${ITEMS.filter(i=>i.cat===c).map(i=>{const on=D.items.includes(i.id);return `<button class="chip" type="button" data-item="${i.id}" aria-pressed="${on}" ${!on&&full?'disabled':''}>${esc(i.name)}${i.alc?' · 18+':''}</button>`}).join('')}</div></div>`).join('')}</div>
+  <aside class="summary"><span class="eyebrow">${T.name}</span>${slotsHTML(sel,max)}
+  <div class="lines">${sel.map(i=>`<div><span>${esc(i.name)}</span><span class="muted">${money(i.price)}</span></div>`).join('')}</div>
+  <div class="total"><span>Your price</span><span>${money(T.price)}</span></div>
+  ${full?`<p style="font-size:.82rem">${retail>T.price?'You save '+money(retail-T.price)+' vs buying separately':'Bought separately: '+money(retail)}</p>`:`<p class="muted" style="font-size:.82rem">Choose ${max-sel.length} more</p>`}
+  <button class="btn" type="button" id="d-add" ${full?'':'disabled'}>Add to bag</button></aside></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-tier]').forEach(b=>b.onclick=()=>{D.tier=+b.dataset.tier;D.items=D.items.slice(0,D.tier);renderD()});
+  s.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{const id=b.dataset.item;if(D.items.includes(id))D.items=D.items.filter(x=>x!==id);else if(D.items.length<max)D.items.push(id);renderD()});
+  $('#d-add').onclick=()=>{bag.push({title:T.name+' · any '+max,price:T.price,children:sel.map(i=>({name:i.name,price:0})),props:{}});bagCount();openBag()};
+}
+
+/* E: gift finder */
+const E={q:0,a:{}};
+const QS=[
+ {k:'who',t:'Who’s it for?',o:[['parents','New parents','Baby shower or newborn'],['friend','A friend','Birthday, just because'],['colleague','A colleague','Thanks, farewell, welcome'],['family','Family','Festivals, milestones']]},
+ {k:'occ',t:'What are you celebrating?',o:[['baby','A new baby',''],['birthday','A birthday',''],['diwali','Diwali','Festival of lights'],['thanks','Saying thank you','']]},
+ {k:'budget',t:'What’s your budget?',o:[['80','Under $80',''],['150','$80 – $150',''],['999','$150+','']]},
+ {k:'avoid',t:'Anything to avoid?',o:[['none','No restrictions',''],['alc','No alcohol',''],['vegan','Vegan only',''],['nuts','Nut-free','']]}
+];
+function recommend(){
+  const a=E.a; let pool=ITEMS.slice();
+  if(a.avoid==='alc')pool=pool.filter(i=>!i.alc); if(a.avoid==='vegan')pool=pool.filter(i=>i.diet.includes('vegan')); if(a.avoid==='nuts')pool=pool.filter(i=>!i.nuts);
+  const pref={baby:['spritz','swaddle','bunny','handcream','choc'],birthday:['prosecco','fudge','candle','dukkah','lavosh'],diwali:['katli','chai','candle','biscotti','quince'],thanks:['choc','chai','candle','lavosh','quince']}[a.occ]||[];
+  let picks=pref.map(byId).filter(i=>pool.includes(i));
+  pool.forEach(i=>{if(picks.length<5&&!picks.includes(i))picks.push(i)});
+  const cap=+a.budget; const box=cap<=80?BOXES[0]:cap<=150?BOXES[1]:BOXES[2];
+  picks=picks.slice(0,box.holds);
+  while(picks.length>1&&box.price+picks.reduce((s,i)=>s+i.price,0)>cap)picks.pop();
+  const name={baby:'The New Arrival',birthday:'The Big Day',diwali:'Festival of Lights',thanks:'With Gratitude'}[a.occ]||'The DIVZ Classic';
+  return {box,picks,name};
+}
+function renderE(){
+  if(E.q<QS.length){
+    const q=QS[E.q];
+    $('#screen').innerHTML=`<div class="quiz"><div class="qprog"><i style="width:${E.q/QS.length*100}%"></i></div><span class="eyebrow">Question ${E.q+1} of ${QS.length}</span><p class="qtitle">${q.t}</p><div class="qopts">${q.o.map(([v,l,s])=>`<button class="qopt" type="button" data-v="${v}" aria-pressed="${E.a[q.k]===v}">${l}${s?`<small>${s}</small>`:''}</button>`).join('')}</div>${E.q?'<button class="btn ghost small" type="button" id="e-back" style="align-self:flex-start">Back</button>':''}</div>`;
+    $('#screen').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{E.a[q.k]=b.dataset.v;E.q++;renderE()});
+    const bk=$('#e-back'); if(bk)bk.onclick=()=>{E.q--;renderE()};
+  }else{
+    const r=recommend(); const total=r.box.price+r.picks.reduce((s,i)=>s+i.price,0);
+    $('#screen').innerHTML=`<div class="quiz"><div class="qprog"><i style="width:100%"></i></div><span class="eyebrow">We'd send</span>
+    <div class="result">${ph('photo: '+r.name)}<div class="stack" style="gap:8px"><h3 style="font-size:1.4rem">${r.name}</h3><p class="price-big">${money(total)}</p><ul style="margin:0;padding-left:18px;font-size:.86rem">${r.picks.map(i=>`<li>${esc(i.name)}</li>`).join('')}<li>${r.box.name} and printed card</li></ul>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn" type="button" id="e-add">Add to bag</button><button class="btn ghost" type="button" id="e-custom">Customise it</button></div></div></div>
+    <button class="btn ghost small" type="button" id="e-restart" style="align-self:flex-start">Start again</button></div>`;
+    $('#e-add').onclick=()=>addHamper(r.box,r.picks,{'Gift finder':r.name},r.name);
+    $('#e-custom').onclick=()=>{A.box=r.box.id;A.items=r.picks.map(i=>i.id);A.occ={baby:'Baby shower',birthday:'Birthday',diwali:'Diwali',thanks:'Thank you'}[E.a.occ]||'Just because';A.step=2;show('A');document.getElementById('protos').scrollIntoView({behavior:'smooth'})};
+    $('#e-restart').onclick=()=>{E.q=0;E.a={};renderE()};
+  }
+}
+
+/* references */
+const REFS=[
+ ['The Baby Gift Company','Australia','https://www.thebabygiftcompany.com.au/create-your-own-gift-box','Build-your-own baby hamper. Items priced individually, plus $7.95 gift wrap with signature box and a choice of ribbon colour. Free handwritten card, delivery to homes, workplaces and hospitals.','Hospital delivery and ribbon colour choice.'],
+ ['Baby Gifts Australia','Australia','https://babygiftsaustralia.com.au','"Create your own hamper" builder, with personalised items such as names and engraving.','Name personalisation for baby gifts.'],
+ ['The Hamper Emporium','Australia','https://www.thehamperemporium.com.au','Large curated range for personal and corporate gifts. Pages for people overseas sending to Australia, Afterpay and Zip at checkout.','"Send a hamper to Australia from overseas" pages.'],
+ ['Edible Blooms','Australia','https://www.edibleblooms.com.au','Chocolate bouquets and gift boxes, with a build-a-box option.','Same-day delivery messaging, and a build-a-box like Concept C.'],
+ ['Hamper Me','Australia','https://www.hamperme.com.au','Small Australian hamper brand. "Gourmet (no alcohol)" as its own menu item, corporate orders, tailor-made hampers on request.','Alcohol-free as a main menu item.'],
+ ['Gifts Australia','Australia','https://www.giftsaustralia.com.au','Wide gift store mixing hampers with personalised presents.','Shopping by recipient as well as by occasion.'],
+ ['BOXFOX','USA','https://www.boxfox.com','The best-known build-a-box. Three steps: box colour, items with a live total, then a card with To/From and a 160-character message.','The step-by-step flow. Concept A is closest to this.'],
+ ['Greetabl','USA','https://greetabl.com/pages/builder','Pick a box design, then a gift, then personalise with fonts, a message and photos printed inside the box. Ship date asked first.','"Writer’s block? Let us help" message ideas.'],
+ ['Hampers.com','UK','https://www.hampers.com','Curated hampers only. Menus by occasion, contents, recipient and price, plus a gift finder by interests.','The "shop by contents" menu (champagne, cheese, chocolate).'],
+ ['Bokksu','USA','https://bokksu.com','Japanese snack subscription boxes plus a one-off shop, with a story behind every item.','Maker stories, and a monthly gift box idea for later.']
+];
+$('#refList').innerHTML=REFS.map(([n,c,u,d,l])=>`<article class="ref"><div class="top"><h3>${n}</h3><span class="where">${c}</span></div>${ph('screenshot')}<a href="${u}" target="_blank" rel="noopener">${u.replace('https://','')}</a><p>${esc(d)}</p><p class="look">Look at: ${esc(l)}</p></article>`).join('');
+
+drawTabs(); show('A');
+})();
+</script>

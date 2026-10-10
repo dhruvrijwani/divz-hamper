@@ -1,0 +1,894 @@
+<title>DIVZ Custom Hampers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column for the research, widening into a "browser frame" stage for the live storefront prototypes. */
+:root{
+  --paper:#F6F7F4; --surface:#FFFFFF; --sage:#E7EEEA; --ink:#16302A; --muted:#566862; --line:#D7DFDB;
+  --ribbon:#C9364F; --ribbon-soft:#F8E1E5; --wattle:#B98411; --wattle-soft:#FBF0D3;
+  --ok:#2F7A55; --ok-soft:#DDF0E5; --plus:#7A3FB0; --plus-soft:#EEE3F8; --no:#6B6F6E; --no-soft:#E9EBEA;
+  --shadow:0 1px 2px rgba(22,48,42,.06),0 8px 24px rgba(22,48,42,.08);
+  --f-display:"Gloock",Georgia,"Times New Roman",serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --c-sips:#DDE8F4; --c-sweet:#F6E2D6; --c-savoury:#EAE7D2; --c-keepsake:#E8E1F1; --c-pamper:#DCEFE7;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0E1916; --surface:#15231F; --sage:#1B2D28; --ink:#E6EEEA; --muted:#9BB0A8; --line:#2A3D37;
+  --ribbon:#F07188; --ribbon-soft:#3A1E26; --wattle:#E7B848; --wattle-soft:#352B12;
+  --ok:#6FD19D; --ok-soft:#173327; --plus:#C79BF0; --plus-soft:#2B1F3A; --no:#A9AFAD; --no-soft:#252B29;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  --c-sips:#1E2B3A; --c-sweet:#3A2A21; --c-savoury:#2F2D1E; --c-keepsake:#2B2438; --c-pamper:#1C3129;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E1916; --surface:#15231F; --sage:#1B2D28; --ink:#E6EEEA; --muted:#9BB0A8; --line:#2A3D37;
+  --ribbon:#F07188; --ribbon-soft:#3A1E26; --wattle:#E7B848; --wattle-soft:#352B12;
+  --ok:#6FD19D; --ok-soft:#173327; --plus:#C79BF0; --plus-soft:#2B1F3A; --no:#A9AFAD; --no-soft:#252B29;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  --c-sips:#1E2B3A; --c-sweet:#3A2A21; --c-savoury:#2F2D1E; --c-keepsake:#2B2438; --c-pamper:#1C3129;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+a{color:var(--ribbon);text-underline-offset:3px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.8rem,3.4vw,2.5rem)}
+h3{font-size:1.3rem}
+p{margin:0}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ribbon);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+.read{max-width:68ch}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.stack{display:flex;flex-direction:column;gap:14px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:10px}
+.mark{font-family:var(--f-display);font-size:1.5rem;letter-spacing:.06em;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+.mark svg{width:22px;height:22px}
+.top nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.top nav a{color:var(--muted);text-decoration:none;font-size:.88rem;padding:6px 10px;border-radius:99px;white-space:nowrap}
+.top nav a:hover{color:var(--ink);background:var(--sage)}
+
+/* hero */
+.hero{padding-block:56px 40px}
+.hero h1{font-size:clamp(2.4rem,6vw,4.4rem);max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--ribbon)}
+.hero .lede{font-size:1.15rem;color:var(--muted);max-width:60ch;margin-top:18px}
+.answer{margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.answer>div{background:var(--surface);padding:18px 20px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.answer b{font-size:1rem}
+.answer p{font-size:.92rem;color:var(--muted)}
+
+section.block{padding-block:56px;border-top:1px solid var(--line)}
+section.block>.wrap>header{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap;letter-spacing:.02em}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-native{background:var(--ok-soft);color:var(--ok)}
+.p-app{background:var(--wattle-soft);color:var(--wattle)}
+.p-plus{background:var(--plus-soft);color:var(--plus)}
+.p-no{background:var(--no-soft);color:var(--no)}
+
+/* flow diagram */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:f}
+.flow .node{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative;display:flex;flex-direction:column;gap:8px}
+.flow .node .eyebrow{color:var(--ribbon)}
+.flow .node:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translate(50%,-50%);color:var(--muted);font-size:1.1rem;z-index:1}
+.flow ul{margin:0;padding-left:0;list-style:none;font-size:.86rem;display:flex;flex-direction:column;gap:3px}
+.flow li.child{padding-left:14px;color:var(--muted);position:relative}
+.flow li.child::before{content:"";position:absolute;left:3px;top:0;bottom:50%;width:7px;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+@media (max-width:820px){.flow{grid-template-columns:1fr 1fr}.flow .node::after{display:none}}
+@media (max-width:480px){.flow{grid-template-columns:1fr}}
+
+/* tables */
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--sage)}
+tr:last-child td{border-bottom:0}
+td code{background:var(--sage);padding:1px 5px;border-radius:4px}
+.t-wide{min-width:880px}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card ul{margin:0;padding-left:18px;font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+.verdict{font-size:.85rem;padding-top:10px;border-top:1px dashed var(--line);color:var(--muted)}
+.verdict b{color:var(--ink)}
+
+/* prototype stage */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:thin}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 14px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:2px;min-width:170px}
+.tab small{color:var(--muted);font-size:.78rem}
+.tab b{font-weight:600;font-size:.92rem}
+.tab[aria-selected="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--ribbon)}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+@media (max-width:980px){.stage{grid-template-columns:1fr}}
+.browser{border:1px solid var(--line);border-radius:14px;overflow:clip;background:var(--surface);box-shadow:var(--shadow);min-width:0}
+.chrome{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--sage);border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:5px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.url{flex:1;min-width:0;font-family:var(--f-mono);font-size:.75rem;color:var(--muted);background:var(--surface);border-radius:6px;padding:4px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.store-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.store-h .mark{font-size:1.25rem}
+.store-h nav{display:flex;gap:16px;font-size:.84rem;color:var(--muted)}
+.store-h nav span.on{color:var(--ink);font-weight:600}
+@media (max-width:640px){.store-h nav{display:none}}
+.bag{position:relative;display:flex;align-items:center;gap:6px;font-size:.84rem;background:none;border:0;cursor:pointer}
+.bag i{font-style:normal;background:var(--ribbon);color:var(--surface);border-radius:99px;font-size:.7rem;padding:0 6px;font-weight:700}
+.screen{padding:22px;min-height:520px}
+@media (max-width:520px){.screen{padding:14px}}
+.notes{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);display:flex;flex-direction:column;gap:12px}
+.notes .card{gap:8px}
+.notes h4{margin:0;font-size:.95rem}
+.notes p,.notes li{font-size:.86rem}
+
+/* store UI bits */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:99px;font-weight:600;font-size:.9rem;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.small{padding:7px 12px;font-size:.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 12px;font-size:.84rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.steps{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.steps button{border:0;background:none;padding:4px 0;font-size:.82rem;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px}
+.steps button b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);font-size:.72rem}
+.steps button.on{color:var(--ink);font-weight:600}
+.steps button.on b{background:var(--ribbon);border-color:var(--ribbon);color:var(--surface)}
+.steps button.done b{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.steps .sep{width:18px;border-top:1px solid var(--line);align-self:center}
+.builder{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:20px}
+@media (max-width:760px){.builder{grid-template-columns:1fr}}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.opt{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:12px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;position:relative}
+.opt[aria-pressed="true"]{border-color:var(--ribbon);box-shadow:0 0 0 1px var(--ribbon)}
+.opt .art{height:84px;border-radius:8px;display:grid;place-items:center;color:var(--ink)}
+.opt .art svg{width:40px;height:40px}
+.opt .nm{font-weight:600;font-size:.88rem;line-height:1.3}
+.opt .sz{font-size:.76rem;color:var(--muted)}
+.opt .pr{font-size:.86rem;font-variant-numeric:tabular-nums}
+.tagrow{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:.66rem;font-weight:700;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--sage);color:var(--muted)}
+.tag.alc{background:var(--ribbon-soft);color:var(--ribbon)}
+.tag.heat{background:var(--wattle-soft);color:var(--wattle)}
+.opt .add{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:.95rem}
+.opt[aria-pressed="true"] .add{background:var(--ribbon);color:var(--surface);border-color:var(--ribbon)}
+.opt.dim{opacity:.45}
+.summary{background:var(--sage);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;align-self:start;position:sticky;top:80px}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.slot{aspect-ratio:1;border-radius:8px;border:1.5px dashed var(--line);display:grid;place-items:center;background:var(--surface);max-width:100%}
+.slot.full{border-style:solid;border-color:transparent}
+.slot svg{width:60%;height:60%}
+.slot.off{opacity:.25}
+.lines{font-size:.82rem;display:flex;flex-direction:column;gap:4px}
+.lines div{display:flex;justify-content:space-between;gap:8px}
+.lines span:last-child{font-variant-numeric:tabular-nums}
+.total{display:flex;justify-content:space-between;font-weight:700;border-top:1px solid var(--line);padding-top:8px;font-variant-numeric:tabular-nums}
+.field{display:flex;flex-direction:column;gap:5px;font-size:.84rem;font-weight:600}
+.field input,.field textarea,.field select{font:inherit;font-weight:400;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--surface);color:var(--ink)}
+.field textarea{resize:vertical;min-height:84px}
+.field .count{font-weight:400;color:var(--muted);font-size:.76rem;align-self:flex-end}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.form2{grid-template-columns:1fr}}
+.note{font-size:.8rem;color:var(--muted);background:var(--wattle-soft);border-radius:8px;padding:8px 10px}
+.note.red{background:var(--ribbon-soft)}
+
+/* PDP */
+.pdp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+@media (max-width:760px){.pdp{grid-template-columns:1fr}}
+.gallery{border-radius:14px;background:var(--c-keepsake);aspect-ratio:1/1;max-width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:26px;align-content:center}
+.gallery .g{aspect-ratio:1;background:var(--surface);border-radius:10px;display:grid;place-items:center;max-width:100%}
+.gallery .g svg{width:50%;height:50%}
+.price-big{font-size:1.5rem;font-variant-numeric:tabular-nums;font-weight:600}
+.swap{display:flex;flex-direction:column;gap:6px}
+.swap legend{font-weight:600;font-size:.88rem;margin-bottom:6px;padding:0}
+fieldset{border:0;padding:0;margin:0}
+.sw-opts{display:flex;flex-wrap:wrap;gap:6px}
+.sw{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:8px 12px;cursor:pointer;font-size:.84rem;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left}
+.sw small{color:var(--muted);font-size:.74rem;font-variant-numeric:tabular-nums}
+.sw[aria-pressed="true"]{border-color:var(--ribbon);box-shadow:0 0 0 1px var(--ribbon)}
+.fixed{font-size:.86rem;color:var(--muted)}
+.meter{display:flex;flex-direction:column;gap:4px;font-size:.8rem}
+.meter .bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.meter .bar i{display:block;height:100%;background:var(--ok)}
+.addon{display:flex;align-items:center;gap:10px;font-size:.86rem;border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer;background:var(--surface)}
+.addon input{accent-color:var(--ribbon)}
+
+/* collection + tray */
+.coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding-bottom:110px}
+.tray{position:sticky;bottom:0;margin:0 -22px -22px;background:var(--ink);color:var(--paper);padding:12px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+@media (max-width:520px){.tray{margin:0 -14px -14px;padding:12px 14px}}
+.tray .slots{grid-template-columns:repeat(5,44px);gap:6px}
+.tray .slot{background:transparent;border-color:color-mix(in srgb,var(--paper) 35%,transparent)}
+.tray .slot.full{background:var(--surface);color:var(--ink)}
+.tray .meta{flex:1;min-width:140px;font-size:.84rem}
+.tray .meta b{font-size:1.05rem;font-variant-numeric:tabular-nums}
+.tray .btn{background:var(--ribbon);border-color:var(--ribbon);color:var(--paper)}
+
+/* tier */
+.tiers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.tier{border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:var(--surface);text-align:left;display:flex;flex-direction:column;gap:2px}
+.tier[aria-pressed="true"]{border-color:var(--ribbon);box-shadow:0 0 0 1px var(--ribbon)}
+.tier .tp{font-family:var(--f-display);font-size:1.6rem}
+.tier small{color:var(--muted)}
+.save{color:var(--ok);font-weight:600}
+
+/* quiz */
+.quiz{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.qprog{height:4px;background:var(--line);border-radius:99px;overflow:hidden}
+.qprog i{display:block;height:100%;background:var(--ribbon);transition:width .3s}
+.qtitle{font-family:var(--f-display);font-size:1.7rem}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.qopts{grid-template-columns:1fr}}
+.qopt{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface);cursor:pointer;text-align:left;font-weight:600;display:flex;flex-direction:column;gap:2px}
+.qopt small{font-weight:400;color:var(--muted)}
+.qopt[aria-pressed="true"]{border-color:var(--ribbon);box-shadow:0 0 0 1px var(--ribbon)}
+.result{display:grid;grid-template-columns:160px minmax(0,1fr);gap:18px;align-items:start;border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--surface)}
+@media (max-width:520px){.result{grid-template-columns:1fr}}
+.result .art{aspect-ratio:1;border-radius:10px;background:var(--c-sweet);display:grid;place-items:center;max-width:100%}
+.result .art svg{width:50%;height:50%}
+
+/* cart drawer */
+.overlay{position:fixed;inset:0;background:rgba(10,20,17,.45);z-index:50;display:flex;justify-content:flex-end}
+.drawer{width:min(460px,100%);height:100%;background:var(--surface);color:var(--ink);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px calc(env(safe-area-inset-bottom,0px) + 18px);gap:14px;overflow-y:auto}
+.drawer header{display:flex;justify-content:space-between;align-items:center}
+.cl{display:flex;flex-direction:column;gap:8px;font-size:.88rem}
+.cl .row{display:flex;justify-content:space-between;gap:10px;font-variant-numeric:tabular-nums}
+.cl .parent{font-weight:600}
+.cl .child{padding-left:18px;color:var(--muted);position:relative}
+.cl .child::before{content:"";position:absolute;left:6px;top:-4px;height:14px;width:8px;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+.props{font-size:.78rem;color:var(--muted);background:var(--sage);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+pre.code{font-family:var(--f-mono);font-size:.72rem;background:var(--sage);border-radius:8px;padding:12px;overflow-x:auto;margin:0;line-height:1.5;color:var(--ink)}
+details summary{cursor:pointer;font-size:.84rem;font-weight:600}
+
+/* site plan */
+.sitemap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px}
+@media (max-width:860px){.sitemap{grid-template-columns:1fr}}
+.home-stack{display:flex;flex-direction:column;gap:6px}
+.hs{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.hs .n{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);padding-top:3px}
+.hs b{font-size:.92rem}
+.hs p{font-size:.82rem;color:var(--muted)}
+.hs.hero-s{min-height:88px;background:linear-gradient(135deg,var(--ribbon-soft),var(--wattle-soft))}
+.navtree{font-size:.9rem;display:flex;flex-direction:column;gap:12px}
+.navtree ul{margin:4px 0 0;padding-left:18px;color:var(--muted);font-size:.86rem}
+
+/* refs */
+.refs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.ref{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ref .top-r{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ref .flag{font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.ref a.site{font-family:var(--f-mono);font-size:.78rem;word-break:break-all}
+.ref p{font-size:.88rem}
+.ref .borrow{font-size:.84rem;border-top:1px dashed var(--line);padding-top:8px}
+.ref .borrow b{color:var(--ribbon)}
+
+/* commit board */
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:980px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.board{grid-template-columns:1fr}}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.col li{font-size:.86rem;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.col li:last-child{border-bottom:0;padding-bottom:0}
+.col li small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.phases{grid-template-columns:1fr}}
+.sources{font-size:.84rem;columns:2 320px;column-gap:28px}
+.sources li{break-inside:avoid;margin-bottom:6px}
+footer.foot{padding-block:28px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="top">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="DIVZ">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="6" width="20" height="4" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 6v15" stroke="var(--ribbon)" stroke-width="2"/><path d="M12 6c-2-4-6-3-5 0M12 6c2-4 6-3 5 0" fill="none" stroke="var(--ribbon)" stroke-width="1.6"/></svg>
+      DIVZ
+    </a>
+    <nav aria-label="Sections">
+      <a href="#answer">Answer</a><a href="#how">How it works</a><a href="#where">Where it lives</a><a href="#options">Build options</a><a href="#protos">Prototypes</a><a href="#site">Site plan</a><a href="#refs">References</a><a href="#au">Australia</a><a href="#commit">Commit list</a><a href="#plan">Recommendation</a>
+    </nav>
+  </div>
+</div>
+
+<main id="top">
+<div class="wrap hero" id="answer">
+  <p class="eyebrow">DIVZ · Research &amp; prototypes · October 2026</p>
+  <h1 style="margin-top:12px">Custom hampers, <em>built on Shopify</em></h1>
+  <p class="lede">How a "build your own hamper" feature works on Shopify, the four ways to build it, five clickable storefront prototypes, the site structure for a new Australian gifting brand, and a list of what we can safely promise the client.</p>
+  <div class="answer">
+    <div><span class="pill p-native">Yes, possible</span><b>Custom hampers work on any Shopify plan</b><p>Using a theme-built hamper builder or a bundle app. No Shopify Plus needed at launch.</p></div>
+    <div><span class="pill p-native">Yes</span><b>We need separate templates</b><p>Curated hampers and the builder page each get their own template. Hamper items stay normal products.</p></div>
+    <div><span class="pill p-app">Best of both</span><b>Offer it in two places</b><p>"Customise this hamper" on curated product pages, plus a dedicated "Build a hamper" page.</p></div>
+    <div><span class="pill p-plus">Licence first</span><b>Wine needs a liquor licence</b><p>Selling alcohol online in Australia needs a state liquor licence, and Shopify Payments support for it must be confirmed.</p></div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="block" id="how"><div class="wrap">
+  <header>
+    <p class="eyebrow">01 · The mechanics</p>
+    <h2>How a custom hamper actually works</h2>
+    <p class="read muted">Shopify has no product type called "hamper". A custom hamper is a <b>box product</b> plus the <b>item products</b> the customer picks, kept together as one group from cart to packing slip. Shopify's nested cart lines (an add-on feature in the Cart API) let a box be the "parent" line with the chosen items attached under it. The customer sees one hamper, and the packing team sees exactly what goes in it.</p>
+  </header>
+  <div class="flow" aria-label="Flow of a custom hamper from storefront to order">
+    <div class="node"><span class="eyebrow">Storefront</span><b>Customer builds</b><ul><li>Picks occasion and box</li><li>Adds up to 5 items</li><li>Writes card message</li><li>Chooses delivery date</li></ul></div>
+    <div class="node"><span class="eyebrow">Cart</span><b>One grouped hamper</b><ul><li>Keepsake Hatbox · $18</li><li class="child">Prosecco · $32</li><li class="child">Wattleseed chocolate · $12</li><li class="child">Soy candle · $29</li></ul></div>
+    <div class="node"><span class="eyebrow">Checkout</span><b>Still grouped</b><ul><li>Items shown under the box</li><li>Card message carried as line properties</li><li>Delivery date as cart attribute</li></ul></div>
+    <div class="node"><span class="eyebrow">Order &amp; packing</span><b>Packer sees the recipe</b><ul><li>Hamper ID, items, message on packing slip</li><li>Stock deducted per item</li><li>Sales reports per item</li></ul></div>
+  </div>
+
+  <h3 style="margin-top:44px;margin-bottom:14px">What we set up in Shopify admin</h3>
+  <div class="tscroll"><table class="t-wide">
+    <thead><tr><th>Thing</th><th>How it's modelled</th><th>Example</th><th>Plan</th></tr></thead>
+    <tbody>
+      <tr><td><b>Hamper items</b></td><td>Normal products in a "Builder items" collection. Can also be sold on their own.</td><td>Barossa Shiraz, wattleseed chocolate, soy candle</td><td><span class="pill p-native">Native</span></td></tr>
+      <tr><td><b>Boxes / baskets</b></td><td>A product per box style, with a metafield for how many items it holds</td><td><code>divz.capacity = 5</code></td><td><span class="pill p-native">Native</span></td></tr>
+      <tr><td><b>Item rules</b></td><td>Product metafields that drive filters, badges and builder rules</td><td><code>divz.slot</code> = sweet · <code>divz.contains_alcohol</code> · <code>divz.heat_sensitive</code> · <code>divz.dietary</code></td><td><span class="pill p-native">Native</span></td></tr>
+      <tr><td><b>Occasions</b></td><td>Metaobject entries with hero image, colours, copy and suggested items. Powers occasion pages and the quiz.</td><td>Baby shower, Diwali, Christmas, Birthday</td><td><span class="pill p-native">Native</span></td></tr>
+      <tr><td><b>Curated hampers</b></td><td>Shopify Bundles app (free, by Shopify). Fixed contents with up to 3 swappable choices. Each swap slot is one product whose variants are the choices.</td><td>"The New Arrival": choose sip, sweet, keepsake</td><td><span class="pill p-native">Native</span></td></tr>
+      <tr><td><b>Card message</b></td><td>Line item properties on the box line (To, From, Message). Visible on order and packing slip.</td><td><code>properties[Message]</code></td><td><span class="pill p-native">Native</span></td></tr>
+      <tr><td><b>Delivery date</b></td><td>Cart attribute set by a date picker on the cart page. Rules like cut-offs and blackout dates need an app.</td><td><code>attributes[Delivery date]</code></td><td><span class="pill p-native">Native</span> <span class="pill p-app">App for rules</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="card" style="margin-top:20px">
+    <p class="eyebrow">"Do we need separate product templates?"</p>
+    <p><b>Yes. Online Store 2.0 lets each product use its own template, so we'd build four:</b></p>
+    <ul>
+      <li><code>product.json</code>: standard single item (a candle someone buys on its own).</li>
+      <li><code>product.hamper.json</code>: curated hamper with the "customise" swap selectors and add-ons (Prototype B).</li>
+      <li><code>page.build-a-hamper.json</code>: the step-by-step builder page (Prototype A).</li>
+      <li><code>collection.occasion.json</code>: occasion landing pages pulling from the Occasion metaobject (Prototype C can live here).</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- WHERE -->
+<section class="block" id="where"><div class="wrap">
+  <header>
+    <p class="eyebrow">02 · Placement</p>
+    <h2>Where should customisation live?</h2>
+    <p class="read muted">The client asked whether this goes on the product page or the collection page. Each placement suits a different shopper, so the answer is two of them at launch and one later.</p>
+  </header>
+  <div class="grid2">
+    <div class="card"><div class="head"><h3>On the product page</h3><span class="pill p-native">Launch</span></div><p class="muted">Start from a curated hamper, then swap or add items.</p><ul><li>Suits most gift buyers: they want a nice default fast</li><li>Highest conversion, least decision fatigue</li><li>Native Shopify Bundles handles up to 3 swap slots</li></ul><p class="verdict"><b>Verdict:</b> must-have. See Prototype B.</p></div>
+    <div class="card"><div class="head"><h3>Dedicated builder page</h3><span class="pill p-native">Launch</span></div><p class="muted">Start from an empty box: occasion → box → items → card.</p><ul><li>The headline feature for marketing ("Build your own")</li><li>Full control of steps, rules and the card</li><li>Custom theme code or a bundle app</li></ul><p class="verdict"><b>Verdict:</b> must-have. See Prototype A.</p></div>
+    <div class="card"><div class="head"><h3>On a collection page</h3><span class="pill p-app">Phase 2</span></div><p class="muted">Browse the normal grid with an "Add to box" button and a hamper tray.</p><ul><li>Feels like normal shopping</li><li>Good for large catalogues (50+ items)</li><li>Overkill at launch with ~20 items</li></ul><p class="verdict"><b>Verdict:</b> add when the range grows. See Prototype C.</p></div>
+    <div class="card"><div class="head"><h3>Gift finder quiz</h3><span class="pill p-native">Launch</span></div><p class="muted">Four questions lead to a recommended hamper, which can then be customised.</p><ul><li>Helps undecided buyers</li><li>Collects occasion data for email</li><li>Pure theme code using metafields</li></ul><p class="verdict"><b>Verdict:</b> cheap to build, strong for a new brand. See Prototype E.</p></div>
+  </div>
+</div></section>
+
+<!-- OPTIONS -->
+<section class="block" id="options"><div class="wrap">
+  <header>
+    <p class="eyebrow">03 · Build approaches</p>
+    <h2>Four ways to build it</h2>
+    <p class="read muted">All four are real, documented Shopify approaches. Prices are Shopify AU and App Store list prices as of October 2026.</p>
+  </header>
+  <div class="tscroll"><table class="t-wide">
+    <thead><tr><th style="width:18%">Approach</th><th>What it is</th><th>Cart &amp; checkout look</th><th>Pricing model</th><th>Cost</th><th>Watch out</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Shopify Bundles app</b><br><span class="pill p-native">Any plan</span></td><td>Shopify's free app for fixed bundles. Customers pick variants of components, so each swap slot must be one product with the choices as its variants.</td><td>One line, components listed</td><td>You set a price per combination</td><td>Free</td><td>Max 3 options, 100 variants, 30 components. Bundle price doesn't auto-update if an item price changes. No subscriptions.</td></tr>
+      <tr><td><b>2. Custom theme builder</b><br><span class="pill p-native">Any plan</span></td><td>Our own builder section in the theme. Adds the box and items together using the Cart API with nested cart lines.</td><td>Box line with items nested under it, in cart, checkout, emails and order</td><td>Box price + sum of items (like BOXFOX, Baby Gift Co)</td><td>Dev time only, no monthly fee</td><td>Nested cart lines are newer; spike it in a dev store first. Can't enforce rules at checkout server-side without Plus.</td></tr>
+      <tr><td><b>3. Bundle builder app</b><br><span class="pill p-app">Any plan</span></td><td>Easy Bundles (Skai Lama), Bundler, Boxi and similar. Their own build-a-box page, styled to the theme.</td><td>Usually one bundle line with components</td><td>Sum of items, or fixed tier price ("any 5 for $109")</td><td>US$10–99/mo, often capped by bundle sales</td><td>Monthly fee grows with sales. Less design control. Check AUD and GST display.</td></tr>
+      <tr><td><b>4. Custom app with Shopify Functions</b><br><span class="pill p-plus">Plus only</span></td><td>Our own private app using Cart Transform and Cart Validation functions.</td><td>Fully custom</td><td>Anything</td><td>Plus from A$3,700/mo + dev</td><td>Custom apps with Functions only run on Plus. Not worth it for a new business.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note" style="margin-top:14px"><b>Recommendation:</b> 1 + 2 at launch (no recurring app fees, full design control). Use 3 as the fallback if the nested cart lines spike shows problems, or later if the client wants fixed-price tiers.</p>
+</div></section>
+
+<!-- PROTOTYPES -->
+<section class="block" id="protos"><div class="wrap">
+  <header>
+    <p class="eyebrow">04 · Clickable prototypes</p>
+    <h2>Five ways DIVZ could feel</h2>
+    <p class="read muted">Each one works. Click through, add items, open the bag. The panel beside each prototype says exactly how it would be built on Shopify. Products and prices are sample data in AUD, GST inclusive.</p>
+  </header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="stage">
+    <div class="browser">
+      <div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="url" id="url">divz.com.au</span></div>
+      <div class="store-h">
+        <span class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="6" width="20" height="4" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 6v15" stroke="var(--ribbon)" stroke-width="2"/></svg>DIVZ</span>
+        <nav id="storenav"><span>Occasions</span><span>Hampers</span><span>Build a hamper</span><span>Gift finder</span><span>Corporate</span></nav>
+        <button class="bag" id="bagBtn" type="button">Bag <i id="bagCount">0</i></button>
+      </div>
+      <div class="screen" id="screen"></div>
+    </div>
+    <aside class="notes" id="notes"></aside>
+  </div>
+</div></section>
+
+<!-- SITE PLAN -->
+<section class="block" id="site"><div class="wrap">
+  <header>
+    <p class="eyebrow">05 · Site plan</p>
+    <h2>Sections and pages for launch</h2>
+    <p class="read muted">The business is new, so the site has to sell the idea, build trust and make gifting fast. The homepage below is in scroll order.</p>
+  </header>
+  <div class="sitemap">
+    <div>
+      <h3 style="margin-bottom:12px">Homepage</h3>
+      <div class="home-stack">
+        <div class="hs hero-s"><span class="n">1</span><div><b>Hero with two doors</b><p>"Shop curated hampers" and "Build your own". The seasonal occasion is swapped in via metaobject.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">2</span><div><b>Delivery promise strip</b><p>Order-by time for same/next-day metro, free shipping threshold, hand-packed by DIVZ.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">3</span><div><b>Shop by occasion</b><p>Baby shower, birthday, thank you, Diwali, Christmas, sympathy. Tiles from the Occasion metaobject.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">4</span><div><b>Bestselling hampers</b><p>Product carousel with "Customise" quick link.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">5</span><div><b>How "Build your own" works</b><p>Three steps with an animated box filling up. The feature that sets DIVZ apart.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">6</span><div><b>Shop by budget &amp; recipient</b><p>Under $80 · $80–150 · $150+; for her, him, new parents, colleagues.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">7</span><div><b>What goes inside</b><p>Maker stories: the local producers behind the chocolate, candle, tea.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">8</span><div><b>Gift finder teaser</b><p>"Not sure? Answer 4 questions."</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">9</span><div><b>Corporate gifting band</b><p>Bulk orders, logo cards, invoice billing. Leads to enquiry form.</p></div><span class="pill p-native">Native</span></div>
+        <div class="hs"><span class="n">10</span><div><b>Reviews &amp; unboxing photos</b><p>Needs a reviews app (Judge.me, Okendo etc.).</p></div><span class="pill p-app">App</span></div>
+        <div class="hs"><span class="n">11</span><div><b>Instagram / UGC + newsletter</b><p>Occasion reminder sign-up ("Remind me before Mother's Day").</p></div><span class="pill p-native">Native</span></div>
+      </div>
+    </div>
+    <div class="stack">
+      <h3>Navigation</h3>
+      <div class="navtree card">
+        <div><b>Occasions</b><ul><li>Baby shower &amp; new baby · Birthday · Thank you · Sympathy · Congratulations</li><li>Seasonal: Christmas, Diwali, Lunar New Year, Easter, Mother's Day, Father's Day</li></ul></div>
+        <div><b>Hampers</b><ul><li>All · By budget · By recipient · Alcohol-free · Vegan / gluten-free</li></ul></div>
+        <div><b>Build a hamper</b><ul><li>Builder page · Gift finder quiz</li></ul></div>
+        <div><b>Corporate</b><ul><li>Enquiry form · Bulk ordering · Logo cards</li></ul></div>
+      </div>
+      <h3>Other pages</h3>
+      <div class="card"><ul>
+        <li><b>Product page (curated):</b> gallery, swap selectors, "what's inside" list with allergens, card message, delivery date note, add-ons</li>
+        <li><b>Cart:</b> grouped hampers, delivery date picker, upsell (card upgrade, balloon, extra chocolate)</li>
+        <li><b>Delivery &amp; cut-offs</b>, <b>About / our makers</b>, <b>FAQ</b>, <b>Corporate</b>, <b>Contact</b></li>
+        <li><b>Policies:</b> refunds, shipping, privacy, liquor licence notice (if selling wine)</li>
+      </ul></div>
+      <h3>Likely app stack</h3>
+      <div class="card"><ul>
+        <li><b>Shopify Bundles</b> (free, Shopify)</li>
+        <li><b>Search &amp; Discovery</b> (free, Shopify): filters by occasion, dietary, alcohol-free</li>
+        <li><b>Reviews</b>: Judge.me or Okendo</li>
+        <li><b>Delivery date rules</b>: e.g. Zapiet or a delivery-date app, if cut-offs get complex</li>
+        <li><b>Shopify Email / Klaviyo</b>: occasion reminders</li>
+      </ul></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- REFERENCES -->
+<section class="block" id="refs"><div class="wrap">
+  <header>
+    <p class="eyebrow">06 · Reference stores</p>
+    <h2>Gifting brands already doing this on Shopify</h2>
+    <p class="read muted">Every store below was checked on 10 Oct 2026: its page source loads Shopify's CDN and theme assets, so it is on Shopify. "Borrow" is what's worth taking for DIVZ.</p>
+  </header>
+  <div class="refs" id="refList"></div>
+</div></section>
+
+<!-- AUSTRALIA -->
+<section class="block" id="au"><div class="wrap">
+  <header>
+    <p class="eyebrow">07 · Australia specifics</p>
+    <h2>What's different for an Australian gifting store</h2>
+  </header>
+  <div class="grid2">
+    <div class="card"><div class="head"><h3>Wine needs a liquor licence</h3><span class="pill p-plus">Blocker</span></div><p>Licensing is set by each state. NSW has a packaged liquor licence for online-only sellers. Victoria has a remote seller's packaged liquor licence, which needs RSA and new-entrant training and has a lead time of several weeks. Sellers must show the licence number and an under-18 notice on the site.</p><p class="muted">Victoria also limits delivery hours, and for gift orders both buyer and recipient must be 18+, with ID checked on delivery. The Hamper Emporium shows its liquor licence in its footer.</p></div>
+    <div class="card"><div class="head"><h3>Payments for alcohol</h3><span class="pill p-app">Confirm</span></div><p>Shopify's help pages don't clearly say whether Shopify Payments in Australia accepts licensed alcohol sales. Some third-party sources say alcohol is restricted.</p><p class="muted">Before promising wine, ask Shopify Support with the licence in hand. Fallback: a third-party gateway, or launch alcohol-free and add wine in phase 2.</p></div>
+    <div class="card"><div class="head"><h3>Age checks</h3><span class="pill p-native">Plan it</span></div><p>On non-Plus plans we can't add a date-of-birth field inside checkout (Plus only). Instead: an age confirmation in the cart, saved as a cart attribute, and the courier's ID-on-delivery service.</p></div>
+    <div class="card"><div class="head"><h3>Chocolate in summer</h3><span class="pill p-native">Plan it</span></div><p>Dec–Feb heat melts chocolate in transit. A <code>divz.heat_sensitive</code> metafield can show a badge, add a cool-pack fee, or limit those items to metro express in summer.</p></div>
+    <div class="card"><div class="head"><h3>Pricing &amp; payments</h3><span class="pill p-native">Native</span></div><p>Show prices GST-inclusive (Shopify supports tax-inclusive pricing). Australian shoppers expect Afterpay, Apple Pay and PayPal at checkout.</p></div>
+    <div class="card"><div class="head"><h3>Gifting calendar</h3><span class="pill p-native">Native</span></div><p>Mother's Day (May), EOFY corporate (June), Father's Day (Sept, Australia), Diwali (Oct/Nov), Christmas, Lunar New Year, Easter. Each one is an Occasion metaobject entry plus a homepage swap.</p></div>
+    <div class="card"><div class="head"><h3>Gifts sent from overseas</h3><span class="pill p-native">Native</span></div><p>The Hamper Emporium runs pages like "send a hamper from Canada to Australia". A good fit for diaspora gifting (Diwali, Eid, Lunar New Year). Shopify Markets shows local currency while delivering in AU.</p></div>
+    <div class="card"><div class="head"><h3>Delivery</h3><span class="pill p-native">Native</span></div><p>Local delivery by postcode and pickup are built in. Add couriers via an app (Australia Post, Sendle, etc.). One order ships to one address natively, so multi-recipient corporate orders need an app or CSV order import.</p></div>
+  </div>
+</div></section>
+
+<!-- COMMIT LIST -->
+<section class="block" id="commit"><div class="wrap">
+  <header>
+    <p class="eyebrow">08 · What we can promise</p>
+    <h2>Commit list for the client pitch</h2>
+    <p class="read muted">Sorted by how sure we are. Only the first column should go into a proposal without conditions.</p>
+  </header>
+  <div class="board">
+    <div class="col"><span class="pill p-native">Safe to promise · any plan</span><ul>
+      <li>Curated hampers with up to 3 swappable choices<small>Shopify Bundles app, free</small></li>
+      <li>Build-your-own hamper: box + up to 5 items, grouped in cart, checkout and order<small>Theme code + nested cart lines</small></li>
+      <li>Card message with To / From on each hamper<small>Line item properties</small></li>
+      <li>Delivery date picker in the cart<small>Cart attribute</small></li>
+      <li>Gift finder quiz<small>Theme code + metafields</small></li>
+      <li>Shop by occasion, budget, recipient, dietary, alcohol-free<small>Metaobjects + Search &amp; Discovery</small></li>
+      <li>Local delivery by postcode, pickup, free shipping threshold</li>
+      <li>Custom packing slip showing hamper contents and message</li>
+      <li>Gift cards, discount codes, automatic discounts</li>
+      <li>Corporate enquiry form, invoices via draft orders</li>
+    </ul></div>
+    <div class="col"><span class="pill p-app">Promise with an app</span><ul>
+      <li>Fixed tier price ("any 5 for $109") shown as one line<small>Bundle app, US$10–99/mo</small></li>
+      <li>Delivery cut-offs, blackout dates, time slots<small>Delivery date app</small></li>
+      <li>Several recipients in one checkout<small>Multi-address app, or CSV import</small></li>
+      <li>Photo reviews<small>Reviews app</small></li>
+      <li>Printed photo cards / engraving preview<small>Personalisation app</small></li>
+      <li>Hamper subscriptions<small>Subscription app; native bundles can't be sold on subscription</small></li>
+    </ul></div>
+    <div class="col"><span class="pill p-plus">Only on Shopify Plus</span><ul>
+      <li>Our own fields inside checkout (e.g. DOB on the information step)<small>Checkout UI extensions on those steps are Plus only</small></li>
+      <li>Our own private app with Shopify Functions<small>Public App Store apps can use Functions on any plan</small></li>
+      <li>Server-side "box must contain 3–5 items" checkout rule written by us<small>Cart validation function in a custom app</small></li>
+    </ul></div>
+    <div class="col"><span class="pill p-no">Don't promise</span><ul>
+      <li>Selling wine before a liquor licence is granted</li>
+      <li>Shopify Payments for alcohol, until Shopify confirms in writing</li>
+      <li>Product options that change price on their own<small>Line item properties never change price</small></li>
+      <li>Per-location stock on native bundles<small>Bundles track overall stock only</small></li>
+      <li>Native bundle price updating when an item price changes</li>
+    </ul></div>
+  </div>
+</div></section>
+
+<!-- PLAN -->
+<section class="block" id="plan"><div class="wrap">
+  <header>
+    <p class="eyebrow">09 · Recommendation</p>
+    <h2>What we'd pitch</h2>
+    <p class="read muted">A custom Online Store 2.0 theme based on Shopify's own Horizon or Dawn code. Horizon and Dawn already display nested cart lines in the cart. Start on the Grow plan (A$149/mo, or A$114/mo billed yearly).</p>
+  </header>
+  <div class="phases">
+    <div class="card"><span class="eyebrow">Phase 1 · Launch</span><h3>Curated + build your own</h3><ul><li>Curated hampers with swaps (B)</li><li>Build-a-hamper page (A)</li><li>Gift finder (E)</li><li>Occasion pages, delivery date, card message</li><li>Alcohol-free range if the licence isn't ready</li></ul></div>
+    <div class="card"><span class="eyebrow">Phase 2 · First season</span><h3>Grow the range</h3><ul><li>Wine, once licensed and payments confirmed</li><li>Collection "Add to box" tray (C)</li><li>Reviews, occasion reminder emails</li><li>Corporate multi-recipient orders</li></ul></div>
+    <div class="card"><span class="eyebrow">Phase 3 · Scale</span><h3>Pricing experiments</h3><ul><li>Fixed-price tiers via bundle app (D)</li><li>Subscriptions ("treat box every month")</li><li>Plus only if volume justifies A$3,700+/mo</li></ul></div>
+  </div>
+  <div class="card" style="margin-top:16px"><p class="eyebrow">First technical task</p><p>Before signing off scope: a two-day spike in a Shopify development store to prove the builder (box + 5 nested items + message) through cart, checkout, order and packing slip. Shopify's developer forum has some reports of nested cart lines misbehaving, so we test before we promise. If it fails, switch to Easy Bundles or Boxi and keep the same front-end design.</p></div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <header><p class="eyebrow">Sources</p><h2 style="font-size:1.6rem">Where the facts come from</h2></header>
+  <ul class="sources">
+    <li><a href="https://help.shopify.com/en/manual/products/bundles/shopify-bundles" target="_blank" rel="noopener">Shopify Help: Shopify Bundles app (all plans, limits)</a></li>
+    <li><a href="https://help.shopify.com/en/manual/products/bundles/shopify-bundles/creating-bundles" target="_blank" rel="noopener">Shopify Help: creating bundles (3 options / 100 variants, stock, price)</a></li>
+    <li><a href="https://shopify.dev/docs/apps/build/product-merchandising/bundles" target="_blank" rel="noopener">Shopify Dev: bundles (fixed vs customized)</a></li>
+    <li><a href="https://shopify.dev/docs/apps/build/product-merchandising/nested-cart-lines" target="_blank" rel="noopener">Shopify Dev: nested cart lines</a></li>
+    <li><a href="https://shopify.dev/docs/apps/build/product-merchandising/nested-cart-lines/create-nested-cart-lines" target="_blank" rel="noopener">Shopify Dev: create nested cart lines (Cart AJAX API)</a></li>
+    <li><a href="https://community.shopify.dev/t/nested-cart-lines-for-addons-now-works/20784" target="_blank" rel="noopener">Shopify Dev community: nested cart lines reports</a></li>
+    <li><a href="https://www.shopify.dev/api/functions" target="_blank" rel="noopener">Shopify Dev: Function APIs (custom apps Plus only)</a></li>
+    <li><a href="https://shopify.dev/docs/api/checkout-ui-extensions" target="_blank" rel="noopener">Shopify Dev: checkout UI extensions (Plus for info/shipping/payment)</a></li>
+    <li><a href="https://www.shopify.com/au/pricing" target="_blank" rel="noopener">Shopify AU pricing</a></li>
+    <li><a href="https://apps.shopify.com/bundle-builder" target="_blank" rel="noopener">Easy Bundles by Skai Lama</a></li>
+    <li><a href="https://apps.shopify.com/bundler-product-bundles" target="_blank" rel="noopener">Bundler</a></li>
+    <li><a href="https://apps.shopify.com/boxi" target="_blank" rel="noopener">Boxi: Bundle Builder &amp; BYOB</a></li>
+    <li><a href="https://help.shopify.com/en/manual/compliance/legal/alcohol" target="_blank" rel="noopener">Shopify Help: alcohol products</a></li>
+    <li><a href="https://help.shopify.com/manual/payments/shopify-payments/eligibility" target="_blank" rel="noopener">Shopify Payments eligibility</a></li>
+    <li><a href="https://www.vic.gov.au/apply-remote-sellers-liquor-licence" target="_blank" rel="noopener">Victoria: remote seller's packaged liquor licence</a></li>
+    <li><a href="https://lawpath.com.au/blog/what-licence-do-i-need-to-sell-liquor-online" target="_blank" rel="noopener">Lawpath: licence to sell liquor online</a></li>
+    <li><a href="https://legalvision.com.au/do-i-need-a-licence-to-sell-wine-online" target="_blank" rel="noopener">LegalVision: licence to sell wine online</a></li>
+    <li><a href="https://www.logbase.io/blog/best-apps-shopify-mix-and-match-bundle" target="_blank" rel="noopener">Logbase: mix-and-match apps 2026</a></li>
+  </ul>
+</div></section>
+</main>
+<footer class="foot"><div class="wrap">DIVZ is a working name for the prototype. Sample products and prices are illustrative. Shopify facts checked 10 Oct 2026; re-check app pricing before quoting.</div></footer>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="bagTitle">
+    <header><h3 id="bagTitle">Your bag</h3><button class="btn ghost small" type="button" id="closeBag">Close</button></header>
+    <div id="bagBody" class="stack"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const money=n=>'$'+n.toFixed(2).replace(/\.00$/,'');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const ICON={
+ bottle:'<path d="M17 4h6v6l2 4v20a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2V14l2-4z" fill="none" stroke="currentColor" stroke-width="2"/><rect x="16" y="20" width="8" height="8" fill="currentColor" opacity=".25"/>',
+ bar:'<rect x="9" y="8" width="22" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 17h22M9 25h22M20 8v26" stroke="currentColor" stroke-width="1.5" opacity=".5"/>',
+ jar:'<rect x="11" y="13" width="18" height="21" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="7" width="14" height="6" rx="1.5" fill="currentColor" opacity=".35"/>',
+ box:'<rect x="7" y="14" width="26" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 14l4-6h18l4 6M20 8v24" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+ tin:'<ellipse cx="20" cy="11" rx="10" ry="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 11v18c0 2 4.5 3.5 10 3.5s10-1.5 10-3.5V11" fill="none" stroke="currentColor" stroke-width="2"/>',
+ candle:'<rect x="11" y="16" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 16v-4" stroke="currentColor" stroke-width="2"/><path d="M20 5c3 3 2 6 0 6s-3-3 0-6z" fill="var(--ribbon)"/>',
+ cloth:'<path d="M8 10h24v20H8z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 16h24M8 22h24M14 10v20M20 10v20M26 10v20" stroke="currentColor" stroke-width="1" opacity=".45"/>',
+ heart:'<path d="M20 33S7 25 7 16a6.5 6.5 0 0 1 13-2 6.5 6.5 0 0 1 13 2c0 9-13 17-13 17z" fill="none" stroke="currentColor" stroke-width="2"/>',
+ tube:'<path d="M14 6h12l-1 6v20a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2V12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 12h10" stroke="currentColor" stroke-width="2"/>',
+ hamper:'<path d="M6 18h28l-3 16H9z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 18c0-8 18-8 18 0" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 24h22M10 29h20" stroke="currentColor" stroke-width="1.2" opacity=".5"/>',
+ hatbox:'<ellipse cx="20" cy="13" rx="13" ry="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 13v16c0 2.2 5.8 4 13 4s13-1.8 13-4V13" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 9v24" stroke="var(--ribbon)" stroke-width="2.5"/>'
+};
+const svg=k=>`<svg viewBox="0 0 40 40" aria-hidden="true">${ICON[k]||ICON.box}</svg>`;
+const CATS={sips:'Sips',sweet:'Sweet',savoury:'Savoury',keepsake:'Keepsakes',pamper:'Pamper'};
+const ITEMS=[
+ {id:'shiraz',name:'Barossa Valley Shiraz',size:'750 ml',cat:'sips',price:38,alc:1,icon:'bottle',diet:['vegan','gf']},
+ {id:'prosecco',name:'King Valley Prosecco',size:'750 ml',cat:'sips',price:32,alc:1,icon:'bottle',diet:['vegan','gf']},
+ {id:'spritz',name:'Apple & Elderflower Sparkling',size:'750 ml · alcohol-free',cat:'sips',price:16,icon:'bottle',diet:['vegan','gf']},
+ {id:'chai',name:'Masala Chai Leaf Tea',size:'100 g',cat:'sips',price:18,icon:'tin',diet:['vegan','gf']},
+ {id:'choc',name:'Dark Chocolate & Wattleseed',size:'100 g',cat:'sweet',price:12,heat:1,icon:'bar',diet:['vegan','gf']},
+ {id:'fudge',name:'Salted Caramel Fudge',size:'200 g',cat:'sweet',price:15,heat:1,icon:'box',diet:['gf']},
+ {id:'biscotti',name:'Pistachio & Rose Biscotti',size:'180 g',cat:'sweet',price:16,nuts:1,icon:'jar',diet:[]},
+ {id:'katli',name:'Kaju Katli',size:'250 g',cat:'sweet',price:22,nuts:1,icon:'box',diet:['gf']},
+ {id:'dukkah',name:'Macadamia Dukkah',size:'120 g',cat:'savoury',price:14,nuts:1,icon:'jar',diet:['vegan','gf']},
+ {id:'lavosh',name:'Sea Salt Lavosh',size:'150 g',cat:'savoury',price:9,icon:'box',diet:['vegan']},
+ {id:'quince',name:'Quince Paste',size:'120 g',cat:'savoury',price:11,icon:'jar',diet:['vegan','gf']},
+ {id:'candle',name:'Eucalyptus & Mint Soy Candle',size:'200 g',cat:'keepsake',price:29,icon:'candle',diet:['vegan','gf']},
+ {id:'swaddle',name:'Organic Muslin Swaddle',size:'120 × 120 cm',cat:'keepsake',price:26,icon:'cloth',diet:['vegan','gf']},
+ {id:'bunny',name:'Knitted Bunny Rattle',size:'18 cm',cat:'keepsake',price:24,icon:'heart',diet:['vegan','gf']},
+ {id:'handcream',name:'Kakadu Plum Hand Cream',size:'75 ml',cat:'pamper',price:24,icon:'tube',diet:['vegan','gf']},
+ {id:'bathsalts',name:'Lavender Bath Salts',size:'300 g',cat:'pamper',price:19,icon:'jar',diet:['vegan','gf']}
+];
+const byId=id=>ITEMS.find(i=>i.id===id);
+const BOXES=[
+ {id:'kraft',name:'Kraft Gift Box',holds:3,price:10,icon:'box',note:'Recyclable, satin ribbon'},
+ {id:'hatbox',name:'Keepsake Hatbox',holds:5,price:18,icon:'hatbox',note:'Linen-wrapped, reusable'},
+ {id:'basket',name:'Willow Basket',holds:5,price:28,icon:'hamper',note:'Handwoven, cellophane wrap'}
+];
+const OCC=['Baby shower','Birthday','Thank you','Diwali','Christmas','Just because'];
+const tint=c=>`var(--c-${c})`;
+const tags=i=>`<span class="tagrow">${i.alc?'<span class="tag alc">18+</span>':''}${i.heat?'<span class="tag heat">Keep cool</span>':''}${i.diet.includes('vegan')?'<span class="tag">VG</span>':''}${i.diet.includes('gf')?'<span class="tag">GF</span>':''}${i.nuts?'<span class="tag">Nuts</span>':''}</span>`;
+
+/* ---------- bag (shared) ---------- */
+const bag=[]; // {kind:'hamper'|'bundle', title, price, children:[{name,price}], props:{}, payload}
+function bagCount(){$('#bagCount').textContent=bag.length}
+function openBag(){
+  const body=$('#bagBody');
+  if(!bag.length){body.innerHTML='<p class="muted">Your bag is empty. Build a hamper in any prototype, then add it here to see how Shopify groups it.</p>'}
+  else{
+    let sub=0;
+    body.innerHTML=bag.map((h,ix)=>{
+      const t=h.price+h.children.reduce((a,c)=>a+c.price,0); sub+=t;
+      return `<div class="card" style="gap:10px">
+        <div class="cl"><div class="row parent"><span>${esc(h.title)}</span><span>${money(h.price)}</span></div>
+        ${h.children.map(c=>`<div class="row child"><span>${esc(c.name)}</span><span>${money(c.price)}</span></div>`).join('')}</div>
+        ${Object.keys(h.props).length?`<div class="props">${Object.entries(h.props).map(([k,v])=>`<span><b>${esc(k)}:</b> ${esc(v)}</span>`).join('')}</div>`:''}
+        <div class="row" style="display:flex;justify-content:space-between;font-weight:700"><span>Hamper total</span><span>${money(t)}</span></div>
+        <details><summary>Cart API request this would send</summary><pre class="code">${esc(h.payload)}</pre></details>
+        <button class="btn ghost small" type="button" data-rm="${ix}">Remove hamper</button>
+      </div>`}).join('')+`<div class="total"><span>Subtotal (GST incl.)</span><span>${money(sub)}</span></div><p class="note">Shown the way Shopify renders nested cart lines in Horizon/Dawn: removing the box removes its items.</p>`;
+    body.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{bag.splice(+b.dataset.rm,1);bagCount();openBag()});
+  }
+  $('#overlay').hidden=false; $('#closeBag').focus();
+}
+$('#bagBtn').onclick=openBag;
+$('#closeBag').onclick=()=>{$('#overlay').hidden=true};
+$('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')$('#overlay').hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#overlay').hidden=true});
+
+function nestedPayload(box,items,props){
+  const items_=[{id:'<'+box.name+' variant ID>',quantity:1,parent_id:undefined,properties:Object.assign({_hamper:'H-1042'},props)}]
+    .concat(items.map(i=>({id:'<'+i.name+' variant ID>',quantity:1,parent_id:'<box variant ID>'})));
+  return "fetch('/cart/add.js', {\n  method: 'POST',\n  headers: {'Content-Type': 'application/json'},\n  body: JSON.stringify("+JSON.stringify({items:items_},null,2).replace(/\n/g,'\n  ')+")\n})";
+}
+function addHamper(box,items,props,title){
+  bag.push({title:title||box.name+' · custom hamper',price:box.price,children:items.map(i=>({name:i.name,price:i.price})),props,payload:nestedPayload(box,items,props)});
+  bagCount(); openBag();
+}
+
+/* ---------- prototypes ---------- */
+const PROTOS=[
+ {id:'A',name:'Build-a-Hamper',sub:'Step-by-step page',url:'divz.com.au/pages/build-a-hamper',nav:2,render:renderA,notes:notesA},
+ {id:'B',name:'Customise this hamper',sub:'Product page swaps',url:'divz.com.au/products/the-new-arrival',nav:1,render:renderB,notes:notesB},
+ {id:'C',name:'Fill your box',sub:'Collection + tray',url:'divz.com.au/collections/build-your-own',nav:2,render:renderC,notes:notesC},
+ {id:'D',name:'Pick any 5',sub:'Fixed-price tiers',url:'divz.com.au/pages/pick-any-five',nav:1,render:renderD,notes:notesD},
+ {id:'E',name:'Gift finder',sub:'4-question quiz',url:'divz.com.au/pages/gift-finder',nav:3,render:renderE,notes:notesE}
+];
+let current='A';
+function drawTabs(){
+  $('#tabs').innerHTML=PROTOS.map(p=>`<button class="tab" role="tab" type="button" id="tab-${p.id}" aria-selected="${p.id===current}"><small>Prototype ${p.id}</small><b>${p.name}</b><small>${p.sub}</small></button>`).join('');
+  PROTOS.forEach(p=>$('#tab-'+p.id).onclick=()=>show(p.id));
+}
+function show(id){
+  current=id; drawTabs();
+  const p=PROTOS.find(x=>x.id===id);
+  $('#url').textContent=p.url;
+  [...$('#storenav').children].forEach((s,i)=>s.classList.toggle('on',i===p.nav));
+  $('#notes').innerHTML=p.notes();
+  p.render();
+}
+const noteCard=(pill,title,body)=>`<div class="card"><span>${pill}</span><h4>${title}</h4>${body}</div>`;
+
+/* A: builder */
+const A={step:0,occ:'Baby shower',box:'hatbox',items:['spritz','choc','swaddle'],cat:'all',to:'Priya',from:'The Sydney team',msg:'Welcome to the world, little one! Can’t wait to meet you.',date:'2026-10-24',adult:false};
+function renderA(){
+  const box=BOXES.find(b=>b.id===A.box);
+  const steps=['Occasion','Box','Fill it','Card & date','Review'];
+  const sel=A.items.map(byId);
+  const hasAlc=sel.some(i=>i.alc);
+  const total=box.price+sel.reduce((a,i)=>a+i.price,0);
+  let main='';
+  if(A.step===0){
+    main=`<h3>What's the occasion?</h3><p class="muted" style="margin:4px 0 14px">We'll suggest items and pick the card design to match.</p><div class="opt-grid">${OCC.map(o=>`<button class="opt" type="button" data-occ="${o}" aria-pressed="${A.occ===o}"><span class="art" style="background:var(--sage)">${svg(o==='Baby shower'?'heart':o==='Diwali'?'candle':o==='Christmas'?'hamper':o==='Birthday'?'box':'tin')}</span><span class="nm">${o}</span></button>`).join('')}</div>`;
+  }else if(A.step===1){
+    main=`<h3>Choose your box</h3><p class="muted" style="margin:4px 0 14px">The box sets how many items fit.</p><div class="opt-grid">${BOXES.map(b=>`<button class="opt" type="button" data-box="${b.id}" aria-pressed="${A.box===b.id}"><span class="art" style="background:var(--sage)">${svg(b.icon)}</span><span class="nm">${b.name}</span><span class="sz">Holds ${b.holds} items · ${b.note}</span><span class="pr">${money(b.price)}</span></button>`).join('')}</div>`;
+  }else if(A.step===2){
+    const list=ITEMS.filter(i=>A.cat==='all'||i.cat===A.cat);
+    const full=A.items.length>=box.holds;
+    main=`<h3>Fill it (${A.items.length}/${box.holds})</h3><div class="chips" style="margin:10px 0 14px">${['all',...Object.keys(CATS)].map(c=>`<button class="chip" type="button" data-cat="${c}" aria-pressed="${A.cat===c}">${c==='all'?'All':CATS[c]}</button>`).join('')}</div>
+    ${full?`<p class="note" style="margin-bottom:12px">Your ${box.name} is full. Remove an item or go back and pick a bigger box.</p>`:''}
+    <div class="opt-grid">${list.map(i=>{const on=A.items.includes(i.id);return `<button class="opt${!on&&full?' dim':''}" type="button" data-item="${i.id}" aria-pressed="${on}" ${!on&&full?'aria-disabled="true"':''}><span class="add">${on?'✓':'+'}</span><span class="art" style="background:${tint(i.cat)}">${svg(i.icon)}</span><span class="nm">${esc(i.name)}</span><span class="sz">${esc(i.size)}</span>${tags(i)}<span class="pr">${money(i.price)}</span></button>`}).join('')}</div>`;
+  }else if(A.step===3){
+    main=`<h3>Card &amp; delivery</h3><div class="stack" style="margin-top:14px">
+      <div class="form2"><label class="field" for="a-to">To<input id="a-to" maxlength="40" value="${esc(A.to)}"></label><label class="field" for="a-from">From<input id="a-from" maxlength="40" value="${esc(A.from)}"></label></div>
+      <label class="field" for="a-msg">Message (printed on a ${A.occ.toLowerCase()} card)<textarea id="a-msg" maxlength="250">${esc(A.msg)}</textarea><span class="count" id="a-count">${A.msg.length}/250</span></label>
+      <label class="field" for="a-date">Delivery date<input id="a-date" type="date" value="${A.date}"></label>
+      ${hasAlc?`<label class="addon" for="a-adult"><input type="checkbox" id="a-adult" ${A.adult?'checked':''}> I confirm I and the recipient are 18 or over. Someone 18+ must show ID on delivery.</label>`:''}
+      ${sel.some(i=>i.heat)?'<p class="note">Contains chocolate: between December and February we pack it with a cool pack.</p>':''}
+    </div>`;
+  }else{
+    main=`<h3>Review your hamper</h3><div class="card" style="margin-top:14px"><div class="cl"><div class="row parent"><span>${box.name}</span><span>${money(box.price)}</span></div>${sel.map(i=>`<div class="row child"><span>${esc(i.name)}</span><span>${money(i.price)}</span></div>`).join('')}</div><div class="props"><span><b>Occasion:</b> ${esc(A.occ)}</span><span><b>To:</b> ${esc(A.to)} · <b>From:</b> ${esc(A.from)}</span><span><b>Message:</b> ${esc(A.msg)}</span><span><b>Delivery:</b> ${esc(A.date)}</span></div></div>
+    ${hasAlc&&!A.adult?'<p class="note red" style="margin-top:12px">This hamper has an 18+ item. Go back to "Card & date" and tick the age confirmation.</p>':''}
+    ${!sel.length?'<p class="note red" style="margin-top:12px">Your hamper is empty. Add at least one item.</p>':''}
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="button" id="a-add" ${(hasAlc&&!A.adult)||!sel.length?'disabled':''}>Add hamper to bag · ${money(total)}</button></div>`;
+  }
+  $('#screen').innerHTML=`<nav class="steps" aria-label="Builder steps">${steps.map((s,i)=>`${i?'<span class="sep"></span>':''}<button type="button" data-step="${i}" class="${i===A.step?'on':i<A.step?'done':''}"><b>${i<A.step?'✓':i+1}</b>${s}</button>`).join('')}</nav>
+  <div class="builder"><div>${main}<div style="display:flex;justify-content:space-between;margin-top:20px;gap:10px">${A.step>0?'<button class="btn ghost" type="button" id="a-back">Back</button>':'<span></span>'}${A.step<4?'<button class="btn" type="button" id="a-next">Continue</button>':''}</div></div>
+  <aside class="summary" aria-label="Hamper summary"><span class="eyebrow">Your hamper</span><b>${box.name}</b>
+    <div class="slots">${Array.from({length:5},(_,k)=>{const it=sel[k];return `<span class="slot ${it?'full':''} ${k>=box.holds?'off':''}" style="${it?'background:'+tint(it.cat):''}">${it?svg(it.icon):''}</span>`}).join('')}</div>
+    <div class="lines"><div><span>Box</span><span>${money(box.price)}</span></div>${sel.map(i=>`<div><span>${esc(i.name)}</span><span>${money(i.price)}</span></div>`).join('')}<div><span>Printed card</span><span>Free</span></div></div>
+    <div class="total"><span>Total</span><span>${money(total)}</span></div></aside></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{A.step=+b.dataset.step;renderA()});
+  s.querySelectorAll('[data-occ]').forEach(b=>b.onclick=()=>{A.occ=b.dataset.occ;renderA()});
+  s.querySelectorAll('[data-box]').forEach(b=>b.onclick=()=>{A.box=b.dataset.box;const h=BOXES.find(x=>x.id===A.box).holds;A.items=A.items.slice(0,h);renderA()});
+  s.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{A.cat=b.dataset.cat;renderA()});
+  s.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{const id=b.dataset.item;if(A.items.includes(id))A.items=A.items.filter(x=>x!==id);else if(A.items.length<box.holds)A.items.push(id);renderA()});
+  const nx=$('#a-next'); if(nx)nx.onclick=()=>{A.step++;renderA()};
+  const bk=$('#a-back'); if(bk)bk.onclick=()=>{A.step--;renderA()};
+  if(A.step===3){
+    $('#a-to').oninput=e=>A.to=e.target.value; $('#a-from').oninput=e=>A.from=e.target.value;
+    $('#a-msg').oninput=e=>{A.msg=e.target.value;$('#a-count').textContent=A.msg.length+'/250'};
+    $('#a-date').oninput=e=>A.date=e.target.value;
+    const ad=$('#a-adult'); if(ad)ad.onchange=e=>A.adult=e.target.checked;
+  }
+  const add=$('#a-add'); if(add)add.onclick=()=>addHamper(box,sel,{Occasion:A.occ,To:A.to,From:A.from,Message:A.msg,'Delivery date':A.date});
+}
+function notesA(){return noteCard('<span class="pill p-native">Native · any plan</span>','How we build it',`<ul><li>Page template <code>page.build-a-hamper</code> with a custom builder section</li><li>Boxes and items are normal products, read from collections</li><li>"Add to bag" posts the box plus items to <code>/cart/add.js</code>, with items nested under the box via <code>parent_id</code></li><li>To, From, Message saved as line item properties on the box</li></ul>`)+noteCard('<span class="pill p-app">App alternative</span>','Same flow via app','<p>Easy Bundles (multistep builder, from US$29/mo) or Boxi (full-page builder, from US$21/mo) can do this flow without custom code, with less design control.</p>')+noteCard('','Try this','<p>Switch to the Kraft box: capacity drops to 3. Add the Shiraz: the 18+ confirmation appears. Open the bag to see the Cart API call.</p>')}
+
+/* B: PDP swaps */
+const B={sip:'spritz',sweet:'choc',keep:'swaddle',addons:[],msg:'Congratulations on your little one!'};
+const BSLOTS=[
+ {key:'sip',label:'Something to sip',opts:[['spritz',0],['chai',2],['prosecco',16]]},
+ {key:'sweet',label:'Something sweet',opts:[['choc',0],['biscotti',4],['katli',10]]},
+ {key:'keep',label:'A keepsake for baby',opts:[['swaddle',0],['bunny',0]]}
+];
+const BBASE=119, BFIXED=['handcream','bathsalts','lavosh'];
+function renderB(){
+  const delta=BSLOTS.reduce((a,s)=>a+s.opts.find(o=>o[0]===B[s.key])[1],0);
+  const addTotal=B.addons.reduce((a,id)=>a+byId(id).price,0);
+  const variants=BSLOTS.reduce((a,s)=>a*s.opts.length,1);
+  const alc=BSLOTS.some(s=>byId(B[s.key]).alc);
+  const inside=[...BSLOTS.map(s=>byId(B[s.key])),...BFIXED.map(byId)];
+  $('#screen').innerHTML=`<div class="pdp">
+    <div class="stack"><div class="gallery">${inside.map(i=>`<span class="g" style="background:${tint(i.cat)}">${svg(i.icon)}</span>`).join('')}</div>
+      <div class="card" style="gap:6px"><b style="font-size:.9rem">What's inside</b><ul style="font-size:.84rem">${inside.map(i=>`<li>${esc(i.name)} <span class="muted">· ${esc(i.size)}</span></li>`).join('')}<li>Keepsake Hatbox and printed card</li></ul></div></div>
+    <div class="stack">
+      <span class="eyebrow">Baby shower · Hamper</span>
+      <h3 style="font-size:1.9rem">The New Arrival</h3>
+      <p class="price-big">${money(BBASE+delta)}</p>
+      <p class="muted" style="font-size:.9rem">A gentle welcome for new parents. Choose three of the items; the rest are our favourites.</p>
+      ${BSLOTS.map(s=>`<fieldset class="swap"><legend>${s.label}</legend><div class="sw-opts">${s.opts.map(([id,d])=>`<button class="sw" type="button" data-slot="${s.key}" data-id="${id}" aria-pressed="${B[s.key]===id}">${esc(byId(id).name)}<small>${d?'+'+money(d):'Included'}${byId(id).alc?' · 18+':''}</small></button>`).join('')}</div></fieldset>`).join('')}
+      <p class="fixed">Always included: ${BFIXED.map(id=>byId(id).name).join(', ')}.</p>
+      <fieldset class="swap"><legend>Add something extra</legend>${['candle','fudge'].map(id=>`<label class="addon" for="b-${id}"><input type="checkbox" id="b-${id}" data-addon="${id}" ${B.addons.includes(id)?'checked':''}> ${esc(byId(id).name)} <span class="muted" style="margin-left:auto">+${money(byId(id).price)}</span></label>`).join('')}</fieldset>
+      <label class="field" for="b-msg">Card message<textarea id="b-msg" maxlength="250">${esc(B.msg)}</textarea></label>
+      ${alc?'<p class="note red">Prosecco selected: 18+ confirmation is required in the cart, and ID is checked on delivery.</p>':''}
+      <button class="btn" type="button" id="b-add">Add to bag · ${money(BBASE+delta+addTotal)}</button>
+      <div class="card" style="gap:8px;background:var(--sage);border:0"><b style="font-size:.84rem">Shopify Bundles limits for this hamper</b>
+        <div class="meter"><span>Options used: 3 / 3</span><span class="bar"><i style="width:100%"></i></span></div>
+        <div class="meter"><span>Variants: ${variants} / 100</span><span class="bar"><i style="width:${variants}%"></i></span></div>
+        <div class="meter"><span>Components: ${3+BFIXED.length+1} / 30</span><span class="bar"><i style="width:${(3+BFIXED.length+1)/30*100}%"></i></span></div>
+      </div>
+    </div></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{B[b.dataset.slot]=b.dataset.id;renderB()});
+  s.querySelectorAll('[data-addon]').forEach(c=>c.onchange=()=>{const id=c.dataset.addon;B.addons=c.checked?[...B.addons,id]:B.addons.filter(x=>x!==id);renderB()});
+  $('#b-msg').oninput=e=>B.msg=e.target.value;
+  $('#b-add').onclick=()=>{
+    const variant=BSLOTS.map(s=>byId(B[s.key]).name).join(' / ');
+    bag.push({title:'The New Arrival · '+variant,price:BBASE+delta,children:B.addons.map(id=>({name:byId(id).name+' (add-on)',price:byId(id).price})),props:{Message:B.msg},
+      payload:"// One bundle variant line (Shopify Bundles).\n// Shopify doesn't allow nesting add-ons under bundles yet,\n// so add-ons go in as separate lines tagged with the same _hamper ID.\nfetch('/cart/add.js', {method:'POST', headers:{'Content-Type':'application/json'},\n  body: JSON.stringify({items:[\n    {id:'<The New Arrival: "+variant+" variant ID>', quantity:1,\n     properties:{_hamper:'H-1043', Message:'…'}},\n"+B.addons.map(id=>"    {id:'<"+byId(id).name+" variant ID>', quantity:1, properties:{_hamper:'H-1043'}}").join(",\n")+"\n  ]})\n})"});
+    bagCount();openBag();
+  };
+}
+function notesB(){return noteCard('<span class="pill p-native">Native · any plan · free</span>','How we build it',`<ul><li>One product built in the <b>Shopify Bundles</b> app: 7 components, 3 with customer-chosen variants</li><li>Each combination is a bundle variant you can price (here 18 variants)</li><li>Stock is deducted from each real item</li><li>Template <code>product.hamper</code> renders the variant choices as friendly swap buttons</li></ul>`)+noteCard('<span class="pill p-no">Limits</span>','Where it stops','<p>Max 3 swappable slots and 100 combinations per hamper. Shopify doesn’t yet allow nesting add-ons under a bundle, so extras are separate lines in the cart, linked by a hidden hamper ID.</p><p><b>Stock catch:</b> each swap slot is one product with the choices as variants (e.g. "Hamper sip": Sparkling / Chai / Prosecco). That stock is counted separately from the same drinks sold on their own. If DIVZ needs one shared stock count, build this hamper with the builder approach (A) or a bundle app instead.</p>')}
+
+/* C: collection tray */
+const C={cat:'all',noalc:false,vegan:false,items:['chai','katli','candle']};
+const CBOX=BOXES[1];
+function renderC(){
+  const list=ITEMS.filter(i=>(C.cat==='all'||i.cat===C.cat)&&(!C.noalc||!i.alc)&&(!C.vegan||i.diet.includes('vegan')));
+  const sel=C.items.map(byId); const full=sel.length>=5;
+  const total=CBOX.price+sel.reduce((a,i)=>a+i.price,0);
+  $('#screen').innerHTML=`<div class="stack" style="gap:6px;margin-bottom:14px"><span class="eyebrow">Build your own</span><h3 style="font-size:1.7rem">Fill your hatbox</h3><p class="muted" style="font-size:.9rem">Pick any 5. Every hamper is hand-packed with a printed card.</p></div>
+  <div class="chips" style="margin-bottom:8px">${['all',...Object.keys(CATS)].map(c=>`<button class="chip" type="button" data-cat="${c}" aria-pressed="${C.cat===c}">${c==='all'?'All':CATS[c]}</button>`).join('')}</div>
+  <div class="chips" style="margin-bottom:16px"><button class="chip" type="button" id="c-noalc" aria-pressed="${C.noalc}">Alcohol-free</button><button class="chip" type="button" id="c-vegan" aria-pressed="${C.vegan}">Vegan</button><span class="muted" style="font-size:.8rem;align-self:center">${list.length} products</span></div>
+  <div class="coll-grid">${list.map(i=>{const on=C.items.includes(i.id);return `<div class="opt${!on&&full?' dim':''}" style="cursor:default"><span class="art" style="background:${tint(i.cat)}">${svg(i.icon)}</span><span class="nm">${esc(i.name)}</span><span class="sz">${esc(i.size)}</span>${tags(i)}<span class="pr">${money(i.price)}</span><button class="btn small ${on?'':'ghost'}" type="button" data-item="${i.id}" ${!on&&full?'disabled':''}>${on?'In your box ✓':'Add to box'}</button></div>`}).join('')}</div>
+  <div class="tray"><div class="slots">${Array.from({length:5},(_,k)=>{const it=sel[k];return `<span class="slot ${it?'full':''}" style="${it?'background:'+tint(it.cat):''}" title="${it?esc(it.name):'Empty'}">${it?svg(it.icon):''}</span>`}).join('')}</div>
+  <div class="meta">${sel.length}/5 in your Keepsake Hatbox<br><b>${money(total)}</b> incl. box ${money(CBOX.price)}</div>
+  <button class="btn" type="button" id="c-add" ${sel.length?'':'disabled'}>Add hamper to bag</button></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{C.cat=b.dataset.cat;renderC()});
+  $('#c-noalc').onclick=()=>{C.noalc=!C.noalc;renderC()}; $('#c-vegan').onclick=()=>{C.vegan=!C.vegan;renderC()};
+  s.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{const id=b.dataset.item;if(C.items.includes(id))C.items=C.items.filter(x=>x!==id);else if(C.items.length<5)C.items.push(id);renderC()});
+  $('#c-add').onclick=()=>addHamper(CBOX,sel,{});
+}
+function notesC(){return noteCard('<span class="pill p-native">Native · any plan</span>','How we build it',`<ul><li>Template <code>collection.build</code>: the normal product grid with an "Add to box" button</li><li>Filters come from metafields via Shopify's free Search &amp; Discovery app</li><li>The tray stores picks in the browser, then sends one nested Cart API call</li></ul>`)+noteCard('<span class="pill p-app">App alternative</span>','Bundler, Boxi','<p>Both offer a collection-style builder. Edible Blooms (AU, on Shopify) runs its build-a-box on Bundler.</p>')+noteCard('','When to use','<p>Best once the range is past ~50 items, when a step-by-step builder gets long.</p>')}
+
+/* D: tiers */
+const D={tier:5,items:['spritz','choc','dukkah','candle','handcream']};
+const TIERS={3:69,5:109};
+function renderD(){
+  const max=D.tier; const sel=D.items.slice(0,max).map(byId);
+  const retail=sel.reduce((a,i)=>a+i.price,0)+18;
+  const grouped=Object.keys(CATS).map(c=>({c,items:ITEMS.filter(i=>i.cat===c)}));
+  $('#screen').innerHTML=`<div class="stack" style="gap:6px;margin-bottom:16px"><span class="eyebrow">Set-price hampers</span><h3 style="font-size:1.7rem">Pick any ${max}, one price</h3><p class="muted" style="font-size:.9rem">No maths at the counter: choose a size, fill it, the price doesn't move.</p></div>
+  <div class="tiers">${[3,5].map(t=>`<button class="tier" type="button" data-tier="${t}" aria-pressed="${D.tier===t}"><small>${t===3?'The Little One':'The Classic'}</small><span class="tp">${money(TIERS[t])}</span><small>Any ${t} items + box + card</small></button>`).join('')}</div>
+  <div class="builder"><div class="stack">${grouped.map(g=>`<div><b style="font-size:.9rem">${CATS[g.c]}</b><div class="chips" style="margin-top:6px">${g.items.map(i=>{const on=D.items.slice(0,max).includes(i.id);const full=D.items.slice(0,max).length>=max;return `<button class="chip" type="button" data-item="${i.id}" aria-pressed="${on}" ${!on&&full?'disabled style="opacity:.4"':''}>${esc(i.name)}${i.alc?' · 18+':''}</button>`}).join('')}</div></div>`).join('')}</div>
+  <aside class="summary"><span class="eyebrow">${D.tier===3?'The Little One':'The Classic'}</span><div class="slots" style="grid-template-columns:repeat(5,1fr)">${Array.from({length:5},(_,k)=>{const it=sel[k];return `<span class="slot ${it?'full':''} ${k>=max?'off':''}" style="${it?'background:'+tint(it.cat):''}">${it?svg(it.icon):''}</span>`}).join('')}</div>
+  <div class="lines">${sel.map(i=>`<div><span>${esc(i.name)}</span><span class="muted">${money(i.price)}</span></div>`).join('')}</div>
+  <div class="total"><span>Your price</span><span>${money(TIERS[max])}</span></div>
+  ${sel.length===max?`<p class="save" style="font-size:.84rem">${retail>TIERS[max]?'You save '+money(retail-TIERS[max])+' vs buying separately':'Items bought separately: '+money(retail)}</p>`:`<p class="muted" style="font-size:.84rem">Choose ${max-sel.length} more</p>`}
+  <button class="btn" type="button" id="d-add" ${sel.length===max?'':'disabled'}>Add to bag</button></aside></div>`;
+  const s=$('#screen');
+  s.querySelectorAll('[data-tier]').forEach(b=>b.onclick=()=>{D.tier=+b.dataset.tier;D.items=D.items.slice(0,D.tier);renderD()});
+  s.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{const id=b.dataset.item;if(D.items.includes(id))D.items=D.items.filter(x=>x!==id);else if(D.items.length<max)D.items.push(id);renderD()});
+  $('#d-add').onclick=()=>{bag.push({title:(D.tier===3?'The Little One':'The Classic')+' · pick any '+max,price:TIERS[max],children:sel.map(i=>({name:i.name,price:0})),props:{},payload:"// Handled by the bundle app (e.g. Easy Bundles / Bundler mix & match).\n// The app adds the components, and its public Cart Transform\n// function merges them into ONE line priced at "+money(TIERS[max])+".\n// Works on any plan because the function ships in an App Store app."});bagCount();openBag()};
+}
+function notesD(){return noteCard('<span class="pill p-app">Needs an app · any plan</span>','How we build it',`<ul><li>A bundle app with mix-and-match tiers: Easy Bundles, Bundler (from US$9.99/mo) or Boxi</li><li>The app's Cart Transform function merges items into one fixed-price line</li><li>Public apps can run Functions on every plan; our own custom app could not without Plus</li></ul>`)+noteCard('<span class="pill p-no">Why not native</span>','The catch','<p>Natively a hamper costs the sum of its parts. A fixed price for any 5 items needs a Function, which on non-Plus plans means an App Store app.</p>')+noteCard('','Business note','<p>Easy to market ("any 5 for $109"), but margins vary by item. Keep premium items like wine out of the tier, or as a paid upgrade.</p>')}
+
+/* E: quiz */
+const E={q:0,a:{}};
+const QS=[
+ {k:'who',t:'Who’s it for?',o:[['parents','New parents','Baby shower or newborn'],['friend','A friend','Birthday, just because'],['colleague','A colleague','Thanks, farewell, welcome'],['family','Family','Festivals, milestones']]},
+ {k:'occ',t:'What are you celebrating?',o:[['baby','A new baby',''],['birthday','A birthday',''],['diwali','Diwali','Festival of lights'],['thanks','Saying thank you','']]},
+ {k:'budget',t:'What’s your budget?',o:[['80','Under $80',''],['150','$80 – $150',''],['999','$150+','']]},
+ {k:'avoid',t:'Anything to avoid?',o:[['none','No restrictions',''],['alc','No alcohol',''],['vegan','Vegan only',''],['nuts','Nut-free','']]}
+];
+function recommend(){
+  const a=E.a; let pool=ITEMS.slice();
+  if(a.avoid==='alc')pool=pool.filter(i=>!i.alc); if(a.avoid==='vegan')pool=pool.filter(i=>i.diet.includes('vegan')); if(a.avoid==='nuts')pool=pool.filter(i=>!i.nuts);
+  const pref={baby:['spritz','swaddle','bunny','handcream','choc'],birthday:['prosecco','fudge','candle','dukkah','lavosh'],diwali:['katli','chai','candle','biscotti','quince'],thanks:['choc','chai','candle','lavosh','quince']}[a.occ]||[];
+  let picks=pref.map(byId).filter(i=>pool.includes(i));
+  pool.forEach(i=>{if(picks.length<5&&!picks.includes(i))picks.push(i)});
+  const cap=+a.budget; const box=cap<=80?BOXES[0]:cap<=150?BOXES[1]:BOXES[2];
+  picks=picks.slice(0,box.holds);
+  while(picks.length>1&&box.price+picks.reduce((s,i)=>s+i.price,0)>cap)picks.pop();
+  const name={baby:'The New Arrival',birthday:'The Big Day',diwali:'Festival of Lights',thanks:'With Gratitude'}[a.occ]||'The DIVZ Classic';
+  return {box,picks,name};
+}
+function renderE(){
+  if(E.q<QS.length){
+    const q=QS[E.q];
+    $('#screen').innerHTML=`<div class="quiz"><div class="qprog"><i style="width:${E.q/QS.length*100}%"></i></div><span class="eyebrow">Question ${E.q+1} of ${QS.length}</span><p class="qtitle">${q.t}</p><div class="qopts">${q.o.map(([v,l,s])=>`<button class="qopt" type="button" data-v="${v}" aria-pressed="${E.a[q.k]===v}">${l}${s?`<small>${s}</small>`:''}</button>`).join('')}</div>${E.q?'<button class="btn ghost small" type="button" id="e-back" style="align-self:flex-start">Back</button>':''}</div>`;
+    $('#screen').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{E.a[q.k]=b.dataset.v;E.q++;renderE()});
+    const bk=$('#e-back'); if(bk)bk.onclick=()=>{E.q--;renderE()};
+  }else{
+    const r=recommend(); const total=r.box.price+r.picks.reduce((s,i)=>s+i.price,0);
+    $('#screen').innerHTML=`<div class="quiz"><div class="qprog"><i style="width:100%"></i></div><span class="eyebrow">We’d send</span>
+    <div class="result"><div class="art">${svg(r.box.icon)}</div><div class="stack" style="gap:8px"><h3 style="font-size:1.6rem">${r.name}</h3><p class="price-big">${money(total)}</p><ul style="margin:0;padding-left:18px;font-size:.88rem">${r.picks.map(i=>`<li>${esc(i.name)}</li>`).join('')}<li>${r.box.name} and printed card</li></ul>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn" type="button" id="e-add">Add to bag</button><button class="btn ghost" type="button" id="e-custom">Customise it in the builder</button></div></div></div>
+    <button class="btn ghost small" type="button" id="e-restart" style="align-self:flex-start">Start again</button></div>`;
+    $('#e-add').onclick=()=>addHamper(r.box,r.picks,{'Gift finder':r.name},r.name);
+    $('#e-custom').onclick=()=>{A.box=r.box.id;A.items=r.picks.map(i=>i.id);A.occ={baby:'Baby shower',birthday:'Birthday',diwali:'Diwali',thanks:'Thank you'}[E.a.occ]||'Just because';A.step=2;show('A');document.getElementById('protos').scrollIntoView({behavior:'smooth'})};
+    $('#e-restart').onclick=()=>{E.q=0;E.a={};renderE()};
+  }
+}
+function notesE(){return noteCard('<span class="pill p-native">Native · any plan</span>','How we build it',`<ul><li>Theme section with the questions; answers map to product tags and metafields (occasion, dietary, alcohol)</li><li>Result can be a curated hamper or a pre-filled builder, as "Customise it" shows</li><li>Answers can go to the customer's email profile for occasion reminders</li></ul>`)+noteCard('','Try this','<p>Pick Diwali, $80–150, nut-free. Then hit "Customise it in the builder" to jump into Prototype A, already filled in.</p>')}
+
+/* references */
+const REFS=[
+ ['The Baby Gift Company','AU','https://www.thebabygiftcompany.com.au/create-your-own-gift-box','Create-your-own baby hamper. Items priced individually, plus $7.95 gift wrap that includes their signature box, tissue and a choice of ribbon colour. Free handwritten card, delivery to homes, workplaces or hospitals.','Hospital delivery option and ribbon colour choice for baby showers.'],
+ ['Baby Gifts Australia','AU','https://babygiftsaustralia.com.au','"Create your own hamper" runs through a box-builder app (on an /apps/builder URL), with personalised items such as names and engraving.','Proof a builder app can look on-brand. Name personalisation for baby gifts.'],
+ ['The Hamper Emporium','AU','https://www.thehamperemporium.com.au','Large curated range for personal and corporate gifts. Pages for overseas senders (e.g. Canada to Australia), Afterpay and Zip at checkout, liquor licence shown in the footer.','"Send to Australia from overseas" landing pages, and how to display licence details.'],
+ ['Edible Blooms','AU','https://www.edibleblooms.com.au','Chocolate bouquets and gift boxes. Its page config shows bundle rules from the Bundler app powering build-a-box.','An Australian brand running build-a-box on a low-cost app.'],
+ ['Hamper Me','AU','https://www.hamperme.com.au','Small Australian hamper brand: shop by category, "Gourmet (no alcohol)" as its own menu item, corporate orders, tailor-made hampers by enquiry, express metro delivery.','Alcohol-free as a top-level menu item. A "custom hamper on enquiry" form while the builder is in phase 2.'],
+ ['Gifts Australia','AU','https://www.giftsaustralia.com.au','Wide gift store mixing hampers with personalised presents.','Shop-by-recipient navigation alongside occasions.'],
+ ['BOXFOX','US','https://www.boxfox.com','The best-known build-a-box: (1) box colour, (2) items with live subtotal, (3) card with To/From and a 160-character message. $9 packaging and hand-wrap line. Multiple addresses in one checkout.','The three-step flow and strict card validation. Our Prototype A is closest to this.'],
+ ['Greetabl','US','https://greetabl.com/pages/builder','Builder in three stages: Build → Personalise → Checkout. Customers pick a box design, then a gift, then fonts, a 300-character message and photos printed in the box. Ship date set at the top.','"Writer’s block? Let us help" message prompts, and ship date asked first.'],
+ ['Hampers.com','UK','https://www.hampers.com','Curated hampers only. Navigation by occasion, content, recipient and price, gift finder by interests, free delivery messaging, corporate section.','The "By content" menu (champagne, cheese, chocolate) built from metafield filters.'],
+ ['Bokksu','US','https://bokksu.com','Japanese snack subscription boxes plus a one-off shop, with a strong story behind each item.','Maker stories per item, and a subscription box for phase 3.']
+];
+$('#refList').innerHTML=REFS.map(([n,c,u,d,b])=>`<article class="ref"><div class="top-r"><h3 style="font-size:1.15rem">${n}</h3><span class="flag">${c} · Shopify ✓</span></div><a class="site" href="${u}" target="_blank" rel="noopener">${u.replace('https://','')}</a><p>${esc(d)}</p><p class="borrow"><b>Borrow:</b> ${esc(b)}</p></article>`).join('');
+
+drawTabs(); show('A');
+})();
+</script>
